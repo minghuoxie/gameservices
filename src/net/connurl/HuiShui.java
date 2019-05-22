@@ -6,6 +6,8 @@ import net.pojo.ZhuFang;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HuiShui {
     private String huishuiUrl;
@@ -17,102 +19,146 @@ public class HuiShui {
     //惠水在线 房屋出租
     // /post/fangwu/chuzu/list-0-0-0-1-0-0-1.html
     public void huishuihomechuzhu()throws Exception{
+        List<ZhuFang> listZhuFan=new ArrayList<>();
         Conn con=new Conn();
-        int page=1;
-        con.getConne(huishuiUrl + "/post/fangwu/chuzu/list-0-0-0-1-0-0-" + page+".html", huishuiEnc, new CallBack() {
-            @Override
-            public void callBackOne(BufferedReader reader) throws IOException {
-                StringBuffer buf=new StringBuffer();
-                String line=null;
-                boolean isAdd=false;
-                while((line=reader.readLine())!=null){
-                    if(line.contains("<ul class=\"zf_list\">")){
-                        isAdd=true;
+        for(int page=1;page<=3;page++) {
+            con.getConne(huishuiUrl + "/post/fangwu/chuzu/list-0-0-0-1-0-0-" + page + ".html", huishuiEnc, new CallBack() {
+                @Override
+                public void callBackOne(BufferedReader reader) throws IOException {
+                    StringBuffer buf = new StringBuffer();
+                    String line = null;
+                    boolean isAdd = false;
+                    while ((line = reader.readLine()) != null) {
+                        if (line.contains("<ul class=\"zf_list\">")) {
+                            isAdd = true;
+                        }
+                        if (isAdd) {
+                            buf.append(line);
+                            if (line.contains("</ul>")) {
+                                isAdd = false;
+                            }
+                        }
                     }
-                    if(isAdd){
-                        buf.append(line);
-                        if(line.contains("</ul>")){
-                            isAdd=false;
+
+                    for (String zuStr : buf.toString().split("</li>")) {
+                        ZhuFang zhufang = new ZhuFang();
+                        zuStr = zuStr.replaceAll(" +", " ");
+                        for (int i = 0; i < zuStr.length(); i++) {
+                            char ch = zuStr.charAt(i);
+                            String addrUrl = "";
+                            String title = "";
+                            String peoType = "";
+                            String price = "";
+                            String addr = "";
+                            String content = "";
+                            if (ch == '<' && (i + 9 < zuStr.length()) && "<a href=\"".equals(zuStr.substring(i, i + 9))) {
+                                //获取url
+                                for (int j = i + 9; j < zuStr.length(); j++) {
+                                    if (zuStr.charAt(j) == '"') {
+                                        i = j;
+                                        break;
+                                    }
+                                    addrUrl += zuStr.charAt(j);
+                                }
+                            } else if (ch == 'a' && (i + 5 < zuStr.length()) && "alt=\"".equals(zuStr.substring(i, i + 5))) {
+                                //获取title
+                                for (int j = i + 5; j < zuStr.length(); j++) {
+                                    if (zuStr.charAt(j) == '"') {
+                                        i = j;
+                                        break;
+                                    }
+                                    title += zuStr.charAt(j);
+                                }
+                            } else if (ch == '<' && (i + 21 < zuStr.length()) && "<span class=\"espan1\">".equals(zuStr.substring(i, i + 21))) {
+                                for (int j = i + 21; j < zuStr.length(); j++) {
+                                    if (zuStr.charAt(j) == '<') {
+                                        i = j;
+                                        break;
+                                    }
+                                    peoType += zuStr.charAt(j);
+                                }
+                            } else if (ch == '<' && (i + 21 < zuStr.length()) && "<span class=\"espan3\">".equals(zuStr.substring(i, i + 21))) {
+                                for (int j = i + 21; j < zuStr.length(); j++) {
+                                    if (zuStr.charAt(j) == '<' && (j + 6 < zuStr.length()) && "</div>".equals(zuStr.substring(j, j + 6))) {
+                                        i = j + 6;
+                                        break;
+                                    }
+                                    price += zuStr.charAt(j);
+                                }
+                            } else if (ch == '<' && (i + 18 < zuStr.length()) && "<div class=\"addr\">".equals(zuStr.substring(i, i + 18))) {
+                                for (int j = i + 18; j < zuStr.length(); j++) {
+                                    if (zuStr.charAt(j) == '<') {
+                                        i = j;
+                                        break;
+                                    }
+                                    addr += zuStr.charAt(j);
+                                }
+                            } else if (ch == '<' && (i + 18 < zuStr.length()) && "<div class=\"fccc\">".equals(zuStr.substring(i, i + 18))) {
+                                for (int j = i + 18; j < zuStr.length(); j++) {
+                                    if (zuStr.charAt(j) == '<' && (j + 6 < zuStr.length()) && "</div>".equals(zuStr.substring(j, j + 6))) {
+                                        i = j + 6;
+                                        break;
+                                    }
+                                    content += zuStr.charAt(j);
+                                }
+                            }
+                            //<div class="fccc">
+
+                            if (zhufang.getUrlType().equals("") && !addrUrl.equals("")) {
+                                zhufang.setUrlType(huishuiUrl + addrUrl);
+                            }
+                            if (zhufang.getTitle().equals("") && !title.equals("")) {
+                                zhufang.setTitle(title);
+                            }
+                            if (zhufang.getPerType().equals("") && !peoType.equals("")) {
+                                zhufang.setPerType(peoType);
+                            }
+                            if (zhufang.getPrice().equals("") && !price.equals("")) {
+                                zhufang.setPrice(price.replace("</span>", ""));
+                            }
+                            if (zhufang.getAddr().equals("") && !addr.equals("")) {
+                                zhufang.setAddr(addr);
+                            }
+                            if (zhufang.getContent().equals("") && !content.equals("")) {
+//                            String conStr="";
+//                            boolean isConAdd=true;
+//                            for(int ci=0;ci<content.length();ci++){
+//                                if(content.charAt(ci)=='>'){
+//                                    isConAdd=true;
+//                                }else if(content.charAt(ci)=='<'){
+//                                    conStr+=",";
+//                                    isConAdd=false;
+//                                }
+//                                if(isConAdd){
+//                                    conStr+=content.charAt(ci);
+//                                }
+//                            }
+                                zhufang.setContent(content.replaceAll("<span>|</span>", ""));
+                            }
+                        }
+                        if (zhufang.isNull() != null) {
+                            listZhuFan.add(zhufang);
                         }
                     }
                 }
-
-                for(String zuStr:buf.toString().split("</li>")){
-                    ZhuFang zhufang=new ZhuFang();
-                    zuStr=zuStr.replaceAll(" +"," ");
-                    for(int i=0;i<zuStr.length();i++){
-                        char ch=zuStr.charAt(i);
-                        String addrUrl="";
-                        String title="";
-                        String peoType="";
-                        String price="";
-                        String addr="";
-                        if(ch=='<'&&(i+9<zuStr.length())&&"<a href=\"".equals(zuStr.substring(i,i+9))){
-                            //获取url
-                            for(int j=i+9;j<zuStr.length();j++){
-                                if(zuStr.charAt(j)=='"'){
-                                    i=j;
-                                    break;
-                                }
-                                addrUrl+=zuStr.charAt(j);
-                            }
-                        }else if(ch=='a'&&(i+5<zuStr.length())&&"alt=\"".equals(zuStr.substring(i,i+5))){
-                            //获取title
-                            for(int j=i+5;j<zuStr.length();j++){
-                                if(zuStr.charAt(j)=='"'){
-                                    i=j;
-                                    break;
-                                }
-                                title+=zuStr.charAt(j);
-                            }
-                        }else if(ch=='<'&&(i+21<zuStr.length())&&"<span class=\"espan1\">".equals(zuStr.substring(i,i+21))){
-                            for(int j=i+21;j<zuStr.length();j++){
-                                if(zuStr.charAt(j)=='<'){
-                                    i=j;
-                                    break;
-                                }
-                                peoType+=zuStr.charAt(j);
-                            }
-                        }else if(ch=='<'&&(i+21<zuStr.length())&&"<span class=\"espan3\">".equals(zuStr.substring(i,i+21))){
-                            for(int j=i+21;j<zuStr.length();j++){
-                                if(zuStr.charAt(j)=='<'&&(j+6<zuStr.length())&&"</div>".equals(zuStr.substring(j,j+6))){
-                                    i=j+6;
-                                    break;
-                                }
-                                price+=zuStr.charAt(j);
-                            }
-                        }else if(ch=='<'&&(i+17<zuStr.length())&&"<div class=\"addr\">".equals(zuStr.substring(i,i+17))){
-                            for(int j=i+17;j<zuStr.length();j++){
-                                if(zuStr.charAt(j)=='<'){
-                                    i=j;
-                                    break;
-                                }
-                                addr+=zuStr.charAt(j);
-                            }
-                        }
-
-                        if(zhufang.getUrlType().equals("")&&!addrUrl.equals("")){
-                            zhufang.setUrlType(huishuiUrl+addrUrl);
-                        }
-                        if(zhufang.getTitle().equals("")&&!title.equals("")) {
-                            zhufang.setTitle(title);
-                        }
-                        if(zhufang.getPerType().equals("")&&!peoType.equals("")){
-                            zhufang.setPerType(peoType);
-                        }
-                        if(zhufang.getPrice().equals("")&&!price.equals("")){
-                            zhufang.setPrice(price.replace("</span>",""));
-                        }
-                        if(zhufang.getAddr().equals("")&&!addr.equals("")){
-                            zhufang.setAddr(addr);
-                        }
+            });
+        }
+        con.close();
+        if(listZhuFan!=null&&listZhuFan.size()>0){
+            for(ZhuFang z:listZhuFan){
+                String priStr=z.getPrice();
+                String numStr="";
+                for(int i=0;i<priStr.length();i++){
+                    char c=priStr.charAt(i);
+                    if(c>='0'&&c<='9'){
+                        numStr+=c;
                     }
-                    System.out.println(zhufang);
-                    break;
+                }
+                if(z.getPerType().equals("[个人]")&&numStr!=null&&numStr.length()>0&&Integer.parseInt(numStr)<=700){
+                    System.out.println(z);
                 }
             }
-        });
-        con.close();
+        }
     }
 
     //惠水在线

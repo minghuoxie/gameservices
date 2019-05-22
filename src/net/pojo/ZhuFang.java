@@ -66,6 +66,12 @@ public class ZhuFang implements Serializable {
                 '}';
     }
 
+    public String isNull(){
+        if("".equals(title+perType+price+addr+urlType+content)){
+            return null;
+        }
+        return "";
+    }
     public void setContent(String content) {
         this.content = content;
     }
