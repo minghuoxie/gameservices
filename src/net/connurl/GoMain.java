@@ -14,7 +14,7 @@ public class GoMain {
      * */
     public void go(){
         try {
-            new HuiShui("http://www.huishui.ccoo.cn","gb2312").huishui();
+            new HuiShui("http://www.huishui.ccoo.cn","utf-8").huishuihomechuzhu();
         } catch (Exception e) {
             e.printStackTrace();
         }
