@@ -6,3 +6,5 @@ https://github.com/
 
 net :爬虫
 net.connurl.HuiShui  惠水在线
+net.connurl.HuiShui.huishuihomechuzhu() 惠水住房
+net.connurl.HuiShui.huishui() 惠水招聘
