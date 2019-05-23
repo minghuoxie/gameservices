@@ -2,6 +2,8 @@ package net.connurl;
 
 import net.conn.CallBack;
 import net.conn.Conn;
+import net.dbconnect.Db;
+import net.dbconnect.sqlstr.SqlHuiShui;
 import net.pojo.ZhuFang;
 
 import java.io.BufferedReader;
@@ -144,6 +146,7 @@ public class HuiShui {
             });
         }
         con.close();
+        Db db=new Db();
         if(listZhuFan!=null&&listZhuFan.size()>0){
             for(ZhuFang z:listZhuFan){
                 String priStr=z.getPrice();
@@ -155,10 +158,14 @@ public class HuiShui {
                     }
                 }
                 if(z.getPerType().equals("[个人]")&&numStr!=null&&numStr.length()>0&&Integer.parseInt(numStr)<=700){
-                    System.out.println(z);
+                    int num=db.selectCount(SqlHuiShui.findNum,new Object[]{z.getTitle(),z.getUrlType()});
+                    if(num==0){
+                        db.insertDbOne(SqlHuiShui.insertDats,new Object[]{z.getTitle(),z.getPerType(),z.getPrice(),z.getUrlType(),z.getAddr(),z.getContent()});
+                    }
                 }
             }
         }
+        db.closeConn();
     }
 
     //惠水在线

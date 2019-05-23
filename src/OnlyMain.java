@@ -20,10 +20,6 @@ public class OnlyMain {
     private static void test_TestOne_testOne(){
         new TestOne().testOne();
     }
-    //测试goMain
-    private static void test_GoMain_go(){
-        new GoMain().go();
-    }
     //测试连接mysql数据库
     private static void test_Db_testSelect() throws SQLException {
         new Db().testSelect();
@@ -132,10 +128,14 @@ public class OnlyMain {
         }
     }
 
+    //测试goMain 惠水住房
+    private static void test_GoMain_go(){
+        new GoMain().go();
+    }
     public static void main(String[] args){
         //test
         try {
-            test_Db_selectListObjs();
+            test_GoMain_go();
         } catch (Exception e) {
             e.printStackTrace();
         }

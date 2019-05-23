@@ -11,7 +11,7 @@ import java.util.Map;
 public class Db{
     private Connection con;
     private String driver = "com.mysql.jdbc.Driver";
-    private String url = "jdbc:mysql://localhost:3306/testgms";
+    private String url = "jdbc:mysql://localhost:3306/testgms?characterEncoding=utf8&useSSL=false";
     private String user = "root";
     private String pwd="root";
 
@@ -28,7 +28,9 @@ public class Db{
     }
     //插入数据
     public boolean insertDbOne(String sql,Object[] obs){
-        conn();
+        if(con==null) {
+            conn();
+        }
         if(con!=null){
             try {
                 statement=con.prepareStatement(sql);
@@ -38,7 +40,6 @@ public class Db{
                 e.printStackTrace();
             }
         }
-        closeConn();
         return -1==0;
     }
 
