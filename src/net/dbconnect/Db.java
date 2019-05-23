@@ -1,9 +1,12 @@
 package net.dbconnect;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class Db {
+public class Db{
     private Connection con;
     private String driver = "com.mysql.jdbc.Driver";
     private String url = "jdbc:mysql://localhost:3306/testgms";
@@ -64,7 +67,76 @@ public class Db {
         return this;
     }
 
+    //根据条件查询条数
+    public int selectCount(String sql,Object[] objs){
+        conn();
+        if(con!=null){
+            try{
+                statement=con.prepareStatement(sql);
+                setObjs(objs);
+                reSet=statement.executeQuery();
+                if(reSet.next()){
+                    return reSet.getInt(1);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        closeConn();
+        return 0;
+    }
 
+    //查询返回Map<String,String>
+    public Map<String,String> selectMap(String sql,Object[] objs){
+        conn();
+        Map<String,String> map=new HashMap<>();
+        if(con!=null){
+            try {
+                statement=con.prepareStatement(sql);
+                setObjs(objs);
+                reSet=statement.executeQuery();
+                ResultSetMetaData reDatas=reSet.getMetaData();
+                int colNum=reDatas.getColumnCount();
+                if(reSet.next()){
+                    for(int i=0;i<colNum;i++){
+                        String keyName=reDatas.getColumnName(i+1).toLowerCase();
+                        map.put(keyName,reSet.getObject(keyName)+"");
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        closeConn();
+        return map;
+    }
+
+    //查询 返回List<Map<String,Object>>
+    public List<Map<String,String>> selectLists(String sql,Object[] objs){
+        conn();
+        List<Map<String,String>> list=new ArrayList<>();
+        if(con!=null){
+            try {
+                statement=con.prepareStatement(sql);
+                setObjs(objs);
+                reSet=statement.executeQuery();
+                ResultSetMetaData reDatas=reSet.getMetaData();
+                int colNum=reDatas.getColumnCount();
+                while(reSet.next()){
+                    Map<String,String> map=new HashMap<>();
+                    for(int i=0;i<colNum;i++){
+                        String keyName=reDatas.getColumnName(i+1).toLowerCase();
+                        map.put(keyName,reSet.getObject(keyName)+"");
+                    }
+                    list.add(map);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        closeConn();
+        return list;
+    }
 
     private void setObjs(Object[] obs) throws SQLException {
         if(obs!=null&&obs.length>0){

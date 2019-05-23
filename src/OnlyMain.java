@@ -1,7 +1,9 @@
 import net.connurl.GoMain;
 import net.dbconnect.Db;
 import net.dbconnect.DbCallBack;
+import net.help.MapToObj;
 import net.pojo.MainUser;
+import net.pojo.TestTab;
 import net.test.TestOne;
 
 import java.lang.reflect.Field;
@@ -9,7 +11,9 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class OnlyMain {
     //测试java.net
@@ -72,10 +76,48 @@ public class OnlyMain {
         }
     }
 
+    //测试查询数据的条数
+    private static void test_Db_selectCount(){
+       int num=new Db().selectCount("select count(1) from main_user where ip=?",new Object[]{"78"});
+       System.out.println(num);
+    }
+
+    //测试List<Map<String,String>>
+    private static void test_Db_selectLists(){
+        List<Map<String,String>> list=new Db().selectLists("select * from main_user",null);
+
+//        TestTab tab=new MapToObj().mapToObj(list.get(0), TestTab.class);
+//        System.out.println(tab);
+
+        List<MainUser> listTabs=new MapToObj().mapToObj(list,MainUser.class);
+        for(MainUser tb:listTabs){
+            System.out.println(tb);
+        }
+
+//        if(list!=null&&list.size()>0){
+//            for(Map<String,String> map:list){
+//                Iterator<String> ite=map.keySet().iterator();
+//                while(ite.hasNext()){
+//                    String keyName=ite.next();
+//                    System.out.print(keyName+":"+map.get(keyName)+"   ");
+//                }
+//                System.out.println();
+//            }
+//        }
+    }
+
+    //测试获取Map<String,String>
+    private static void test_Db_selectMap(){
+        Map<String,String> map=new Db().selectMap("select * from test_tab where pint=?",new Object[]{2});
+        System.out.println(map.toString());
+        TestTab tab=new MapToObj().mapToObj(map,TestTab.class);
+        System.out.println(tab);
+    }
+
     public static void main(String[] args){
         //test
         try {
-            test_Db_upDbs();
+            test_Db_selectMap();
         } catch (Exception e) {
             e.printStackTrace();
         }
