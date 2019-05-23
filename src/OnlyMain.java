@@ -114,10 +114,28 @@ public class OnlyMain {
         System.out.println(tab);
     }
 
+    //测试获取对象
+    private static void test_Db_selectObj(){
+        TestTab tb=new Db().selectObj("select pint,pstr,pdate,pdatetime,pdecimal from test_tab where pint=?",new Object[]{2},TestTab.class);
+        System.out.println(tb);
+    }
+
+    //测试获取对象集合
+    private static void test_Db_selectListObjs(){
+        //in 查询失败
+       // List<TestTab> list=new Db().selectListObjs("select pint,pstr,pdate,pdatetime,pdecimal from test_tab where pint in ?",new Object[]{new Integer[]{1,2,3}},TestTab.class);
+        List<TestTab> list=new Db().selectListObjs("select pint,pstr,pdate,pdatetime,pdecimal from test_tab",null,TestTab.class);
+        if(list!=null&&list.size()>0){
+            for(TestTab tb:list){
+                System.out.println(tb);
+            }
+        }
+    }
+
     public static void main(String[] args){
         //test
         try {
-            test_Db_selectMap();
+            test_Db_selectListObjs();
         } catch (Exception e) {
             e.printStackTrace();
         }

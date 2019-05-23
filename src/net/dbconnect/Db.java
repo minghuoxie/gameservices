@@ -1,5 +1,7 @@
 package net.dbconnect;
 
+import net.help.MapToObj;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -136,6 +138,14 @@ public class Db{
         }
         closeConn();
         return list;
+    }
+
+    public<T> T selectObj(String sql,Object[] objs,Class<T> c){
+        return new MapToObj().mapToObj(selectMap(sql,objs),c);
+    }
+
+    public<T> List<T> selectListObjs(String sql,Object[] objs,Class<T> c){
+        return new MapToObj().mapToObj(selectLists(sql,objs),c);
     }
 
     private void setObjs(Object[] obs) throws SQLException {

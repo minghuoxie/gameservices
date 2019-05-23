@@ -19,6 +19,9 @@ public class MapToObj {
 
     //将Map转换为对应的类型 主 key和属性必须一样
     public<T> T mapToObj(Map<String,String> map,Class<T> c){
+        if(map==null||map.isEmpty()){
+            return null;
+        }
         T t= null;
         try {
             t = c.newInstance();
