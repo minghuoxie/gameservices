@@ -4,10 +4,12 @@ import net.conn.CallBack;
 import net.conn.Conn;
 import net.dbconnect.Db;
 import net.dbconnect.sqlstr.SqlHuiShui;
+import net.help.Time;
 import net.pojo.ZhuFang;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -160,7 +162,7 @@ public class HuiShui {
                 if(z.getPerType().equals("[个人]")&&numStr!=null&&numStr.length()>0&&Integer.parseInt(numStr)<=700){
                     int num=db.selectCount(SqlHuiShui.findNum,new Object[]{z.getTitle(),z.getUrlType()});
                     if(num==0){
-                        db.insertDbOne(SqlHuiShui.insertDats,new Object[]{z.getTitle(),z.getPerType(),z.getPrice(),z.getUrlType(),z.getAddr(),z.getContent()});
+                        db.insertDbOne(SqlHuiShui.insertDats,new Object[]{z.getTitle(),z.getPerType(),z.getPrice(),z.getUrlType(),z.getAddr(),z.getContent(),"惠水",Time.getTime("yyyy-MM-dd")});
                     }
                 }
             }

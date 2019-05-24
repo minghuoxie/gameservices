@@ -1,6 +1,7 @@
 package net.pojo;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 public class ZhuFang implements Serializable {
     private String title="";
@@ -9,6 +10,9 @@ public class ZhuFang implements Serializable {
     private String addr="";//地址
     private String urlType="";
     private String content="";
+    private String phone="";//联系方式
+    private String froms="";//来源
+    private Date date; //时间
 
     public String getTitle() {
         return title;
@@ -38,6 +42,30 @@ public class ZhuFang implements Serializable {
         return addr;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getFrom() {
+        return froms;
+    }
+
+    public void setFrom(String froms) {
+        this.froms = froms;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     public void setAddr(String addr) {
         this.addr = addr;
     }
@@ -54,6 +82,16 @@ public class ZhuFang implements Serializable {
         return content;
     }
 
+    public String isNull(){
+        if("".equals(title+perType+price+addr+urlType+content)){
+            return null;
+        }
+        return "";
+    }
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     @Override
     public String toString() {
         return "ZhuFang{" +
@@ -63,16 +101,9 @@ public class ZhuFang implements Serializable {
                 ", addr='" + addr + '\'' +
                 ", urlType='" + urlType + '\'' +
                 ", content='" + content + '\'' +
+                ", phone='" + phone + '\'' +
+                ", froms='" + froms + '\'' +
+                ", date=" + date +
                 '}';
-    }
-
-    public String isNull(){
-        if("".equals(title+perType+price+addr+urlType+content)){
-            return null;
-        }
-        return "";
-    }
-    public void setContent(String content) {
-        this.content = content;
     }
 }

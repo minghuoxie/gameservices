@@ -1,9 +1,12 @@
 import net.connurl.GoMain;
 import net.dbconnect.Db;
 import net.dbconnect.DbCallBack;
+import net.help.FirstNodeTree;
 import net.help.MapToObj;
+import net.help.Time;
 import net.pojo.MainUser;
 import net.pojo.TestTab;
+import net.pojo.ZhuFang;
 import net.test.TestOne;
 
 import java.lang.reflect.Field;
@@ -120,9 +123,9 @@ public class OnlyMain {
     private static void test_Db_selectListObjs(){
         //in 查询失败
        // List<TestTab> list=new Db().selectListObjs("select pint,pstr,pdate,pdatetime,pdecimal from test_tab where pint in ?",new Object[]{new Integer[]{1,2,3}},TestTab.class);
-        List<TestTab> list=new Db().selectListObjs("select pint,pstr,pdate,pdatetime,pdecimal from test_tab",null,TestTab.class);
+        List<ZhuFang> list=new Db().selectListObjs("select * from tab_zhu_fang",null, ZhuFang.class);
         if(list!=null&&list.size()>0){
-            for(TestTab tb:list){
+            for(ZhuFang tb:list){
                 System.out.println(tb);
             }
         }
@@ -132,10 +135,22 @@ public class OnlyMain {
     private static void test_GoMain_go(){
         new GoMain().go();
     }
+
+    //测试时间
+    private static void test_Time_getTime(){
+       System.out.println(Time.getTime("yyyy-MM-dd"));
+    }
+
+    //测试 BufRead
+    private static void test_FirstNodeTree_firstNode(){
+        StringBuffer buf=new StringBuffer("<html class = \"sdfsd\" id = \"dasdsdf\">sdfjklsdf</html>");
+        FirstNodeTree node=new FirstNodeTree(buf);
+        node.firstNode();
+    }
     public static void main(String[] args){
         //test
         try {
-            test_GoMain_go();
+            test_FirstNodeTree_firstNode();
         } catch (Exception e) {
             e.printStackTrace();
         }
