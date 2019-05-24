@@ -21,7 +21,9 @@ public class BufRead {
         index=index+num;
         return reTest;
     }
-
+    public boolean hasNext(){
+        return index<buf.length();
+    }
     public char read(){
         isSet=true;
         ch=buf.charAt(index);

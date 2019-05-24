@@ -3,9 +3,9 @@ package net.connurl;
 import net.conn.CallBack;
 import net.conn.Conn;
 import net.help.FirstNodeTree;
+import net.help.node.HtmlNodeOne;
 
-import java.io.BufferedReader;
-import java.io.IOException;
+import java.io.*;
 
 public class Test {
     public static void testt() throws Exception {
@@ -17,12 +17,18 @@ public class Test {
                 String line=null;
                 int index=0;
                 while((line=reader.readLine())!=null){
-                    buf.append(line);
+                    buf.append(line.replaceAll(" +"," "));
                 }
             }
         });
         con.close();
-        FirstNodeTree treeNode=new FirstNodeTree(buf);
+//
+//        BufferedWriter writer=
+//                new BufferedWriter(new OutputStreamWriter(new FileOutputStream("C:\\Users\\dell\\Desktop\\linhtml.txt")));
+//        writer.write(buf.toString());
+//        writer.close();
+
+        HtmlNodeOne treeNode=new HtmlNodeOne(buf);
         treeNode.setNode();
     }
 }

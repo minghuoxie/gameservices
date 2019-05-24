@@ -19,9 +19,9 @@ public class StateRobot {
         "<div>","<a>","<ul>","<li>","<img>","<p>","<form>","<input>","<ol>","<span>",
         "<h1>","<h2>","<h3>","<h4>","<h5>","<h6>","<table>","<tr>","<th>"};
 
-    private static String[] endArrs={"</html>","</meta>","</title>","</head>","</body>",
-            "</div>","</a>","</ul>","</li>","</img>","</p>","</form>","</input>","</ol>","</span>",
-            "</h1>","</h2>","</h3>","</h4>","</h5>","</h6>","</table>","</tr>","</th>"};
+//    private static String[] endArrs={"</html>","</meta>","</title>","</head>","</body>",
+//            "</div>","</a>","</ul>","</li>","</img>","</p>","</form>","</input>","</ol>","</span>",
+//            "</h1>","</h2>","</h3>","</h4>","</h5>","</h6>","</table>","</tr>","</th>"};
 
     public static boolean isHas(String nodeName){
         for(String s:arrs){
@@ -32,8 +32,8 @@ public class StateRobot {
         return false;
     }
     public static boolean isEnd(String endName){
-        for(String s:endArrs){
-            if(s.equals(endName)){
+        for(String s:arrs){
+            if(endName.equals(Time.addChar(s,1,'/'))){
                 return true;
             }
         }
