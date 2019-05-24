@@ -1,4 +1,5 @@
 import net.connurl.GoMain;
+import net.connurl.Test;
 import net.dbconnect.Db;
 import net.dbconnect.DbCallBack;
 import net.help.FirstNodeTree;
@@ -143,14 +144,16 @@ public class OnlyMain {
 
     //测试 BufRead
     private static void test_FirstNodeTree_firstNode(){
-        StringBuffer buf=new StringBuffer("<html class = \"sdfsd\" id = \"dasdsdf\">sdfjklsdf</html>");
-        FirstNodeTree node=new FirstNodeTree(buf);
-        node.firstNode();
     }
     public static void main(String[] args){
         //test
+        StringBuffer buf=new StringBuffer();
+        buf.append("<html xmlns=\"http://www.w3.org/1999/xhtml\"><head id=\"ggg\"><meta class=\"sdasd\">sdfsdfsdf</meta>" +
+                "</head>" +
+                "<body>hahahah</body></html>");
         try {
-            test_FirstNodeTree_firstNode();
+           new FirstNodeTree(buf).setNode();
+           // Test.testt();
         } catch (Exception e) {
             e.printStackTrace();
         }

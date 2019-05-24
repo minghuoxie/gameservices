@@ -4,6 +4,8 @@ public class BufRead {
     private StringBuffer buf;
     private int index;//buf读取的下标
     private String reTest;//返回的字符串
+    private char ch;
+    public boolean isSet=true;
 
     public BufRead(StringBuffer buf){
         this.buf=buf;
@@ -21,13 +23,34 @@ public class BufRead {
     }
 
     public char read(){
-        char ch=buf.charAt(index);
+        isSet=true;
+        ch=buf.charAt(index);
         index=index+1;
-        if(ch=='<'){
-            StateRobot.setState(StateRobot.LABEL);
-        }else if(ch=='>'&& StateRobot.getState()==StateRobot.LABEL){
-            StateRobot.setState(StateRobot.LAST);
+        if(ch=='\\'){
+            isSet=false;
+            ch=readNext(1);
         }
         return ch;
+    }
+    //返回后面的第n个字符
+    public char readNext(int n){
+        char nextCh=ch;
+        if(index+n<buf.length()){
+            nextCh=buf.charAt(index+n);
+        }
+        index=index+n;
+        return nextCh;
+    }
+
+    public int getIndex(){
+        return this.index;
+    }
+
+    public int setIndex(int n){
+        this.index=this.index+n;
+        return this.index;
+    }
+    public int getLen(){
+        return buf.length();
     }
 }
