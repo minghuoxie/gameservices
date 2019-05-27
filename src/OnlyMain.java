@@ -1,4 +1,5 @@
 import net.connurl.GoMain;
+import net.connurl.QiPan;
 import net.connurl.Test;
 import net.dbconnect.Db;
 import net.dbconnect.DbCallBack;
@@ -6,10 +7,14 @@ import net.help.FirstNodeTree;
 import net.help.MapToObj;
 import net.help.Time;
 import net.help.node.HtmlNodeOne;
+import net.help.node.HtmlNodeTwo;
 import net.pojo.MainUser;
 import net.pojo.TestTab;
 import net.pojo.ZhuFang;
 import net.test.TestOne;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
@@ -147,14 +152,11 @@ public class OnlyMain {
     private static void test_FirstNodeTree_firstNode(){
     }
     public static void main(String[] args){
-        //test
-        StringBuffer buf=new StringBuffer();
-        buf.append("<html xmlns=\"http://www.w3.org/1999/xhtml\"><head id=\"ggg\"><meta class=\"sdasd\">sdfsdfsdf</meta>" +
-                "</head>" +
-                "<body>hahahah</body></html>");
         try {
-           new HtmlNodeOne(buf).setNode();
-            //Test.testt();
+            QiPan qiPan=new QiPan();
+            qiPan.qiPanTwo();
+            qiPan.qiPan();
+            System.out.println("----结束----");
         } catch (Exception e) {
             e.printStackTrace();
         }
