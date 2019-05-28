@@ -33,6 +33,7 @@ public class HuiShui {
                     String line = null;
                     boolean isAdd = false;
                     while ((line = reader.readLine()) != null) {
+                        System.out.println(line);
                         if (line.contains("<ul class=\"zf_list\">")) {
                             isAdd = true;
                         }

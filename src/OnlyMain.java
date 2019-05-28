@@ -147,17 +147,19 @@ public class OnlyMain {
     private static void test_FirstNodeTree_firstNode(){
     }
     public static void main(String[] args){
-        //test
-        StringBuffer buf=new StringBuffer();
-        buf.append("<html xmlns=\"http://www.w3.org/1999/xhtml\"><head id=\"ggg\"><meta class=\"sdasd\">sdfsdfsdf</meta>" +
-                "</head>" +
-                "<body>hahahah</body></html>");
-        try {
-           new HtmlNodeOne(buf).setNode();
-            //Test.testt();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        //test
+//        StringBuffer buf=new StringBuffer();
+//        buf.append("<html xmlns=\"http://www.w3.org/1999/xhtml\"><head id=\"ggg\"><meta class=\"sdasd\">sdfsdfsdf</meta>" +
+//                "</head>" +
+//                "<body>hahahah</body></html>");
+//        try {
+//           new HtmlNodeOne(buf).setNode();
+//            //Test.testt();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+        test_GoMain_go();
 
     }
 }
