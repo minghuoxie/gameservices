@@ -94,10 +94,6 @@ public class HtmlNodeOne {
                     str="";
                     isAdd=false;
                 }
-
-                if(isAdd){
-                    str+=ch;
-                }
             }
         }
         return node;

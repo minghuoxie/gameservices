@@ -5,9 +5,12 @@ public class StateRobot {
     public final static int ERRO=0;
     public final static int LABEL=11;
     public final static int KEY=13;
+    public final static int TENKAY=KEY*10;
     public final static int VAL=14;
     public final static int VALK=141;
     public final static int TENT=15;
+    public final static int TENTENT=TENT*10;
+    public final static int TENTENTENT=TENTENT*10;
     public int getState(){
         return state;
     }

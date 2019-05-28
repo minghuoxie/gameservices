@@ -4,6 +4,11 @@ import net.conn.CallBack;
 import net.conn.Conn;
 import net.help.FirstNodeTree;
 import net.help.node.HtmlNodeOne;
+import net.help.node.HtmlNodeTwo;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.*;
 
@@ -18,17 +23,19 @@ public class Test {
                 int index=0;
                 while((line=reader.readLine())!=null){
                     buf.append(line.replaceAll(" +"," "));
+                   // System.out.println(line.replaceAll(" +"," "));
                 }
             }
         });
         con.close();
-//
-//        BufferedWriter writer=
-//                new BufferedWriter(new OutputStreamWriter(new FileOutputStream("C:\\Users\\dell\\Desktop\\linhtml.txt")));
-//        writer.write(buf.toString());
-//        writer.close();
+        Document doc= Jsoup.parse(buf.toString());
+        Element body=doc.body();
+        Elements childs= body.children();
+        for(int i=0;i<childs.size();i++){
+            Element ele=childs.get(i);
+            System.out.println(ele.tag().getName()+":"+ele.text()+":"+ele.children().size());
+        }
 
-        HtmlNodeOne treeNode=new HtmlNodeOne(buf);
-        treeNode.setNode();
+        System.out.println("---");
     }
 }
