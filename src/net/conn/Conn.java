@@ -1,5 +1,9 @@
 package net.conn;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
 import javax.net.ssl.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -48,7 +52,7 @@ public class Conn {
             e.printStackTrace();
         }
     }
-    public void getConne(String strUrl,String encoding,CallBack callBack) throws Exception {
+    private void connTop(String strUrl,String encoding)throws Exception{
         URL url=new URL(strUrl);
         //打开连接
         conn=(HttpURLConnection)url.openConnection();
@@ -66,11 +70,32 @@ public class Conn {
         conn.setRequestMethod("GET");
         conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101 Safari/537.36");
         conn.setDoInput(true);
+    }
+    public void getConne(String strUrl,String encoding,CallBack callBack) throws Exception {
+        connTop(strUrl,encoding);
         //建立连接
         conn.connect();
         if(conn.getResponseCode()==200){
             reader=new BufferedReader(new InputStreamReader(conn.getInputStream(),encoding));
             callBack.callBackOne(reader);
         }
+    }
+
+    public Element getBodyElement(String strUrl,String encoding)throws Exception{
+        connTop(strUrl,encoding);
+        //建立连接
+        conn.connect();
+        if(conn.getResponseCode()==200){
+            reader=new BufferedReader(new InputStreamReader(conn.getInputStream(),encoding));
+            String line=null;
+            StringBuffer buf=new StringBuffer();
+            while((line=reader.readLine())!=null){
+                buf.append(line);
+            }
+            Document doc = Jsoup.parse(buf.toString());
+            Element body = doc.body();
+            return body;
+        }
+        return null;
     }
 }
