@@ -98,4 +98,39 @@ public class Conn {
         }
         return null;
     }
+
+    //根据标签名称和属性名称获取文本
+    public String getTextByTagAndAttr(String tagName,String attrName,String attrVal,Element root){
+        if(root!=null){
+            if(tagName.equals(root.tagName())&&attrVal.equals(root.attributes().get(attrName))){
+                return root.text();
+            }else if(root.children().size()>0){
+                for(int i=0;i<root.children().size();i++){
+                    String txt=getTextByTagAndAttr(tagName,attrName,attrVal,root.children().get(i));
+                    if(!txt.equals("")){
+                        return txt;
+                    }
+                }
+            }
+        }
+        return "";
+    }
+
+    //根据标签名称和属性名称获取其他属性值
+    public String getAttrValByTagAndAttr(String tagName,String attrName,String attrVal,String muName,Element root){
+        if(root!=null){
+            if(tagName.equals(root.tagName())&&attrVal.equals(root.attributes().get(attrName))){
+                String re=root.attributes().get("href");
+                return re;
+            }else if(root.children().size()>0){
+                for(int i=0;i<root.children().size();i++){
+                    String txt=getAttrValByTagAndAttr(tagName,attrName,attrVal,muName,root.children().get(i));
+                    if(!txt.equals("")){
+                        return txt;
+                    }
+                }
+            }
+        }
+        return "";
+    }
 }

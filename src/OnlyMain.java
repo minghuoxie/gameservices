@@ -1,6 +1,8 @@
+import net.conn.WoffTest;
 import net.connurl.DouYun;
 import net.connurl.GoMain;
 import net.connurl.Test;
+import net.connurl.WuBa;
 import net.dbconnect.Db;
 import net.dbconnect.DbCallBack;
 import net.help.FirstNodeTree;
@@ -148,12 +150,25 @@ public class OnlyMain {
     private static void test_FirstNodeTree_firstNode(){
     }
 
+    //58同城住房的测试
+    private static void test_WuBa_zhufan(){
+        new WuBa().zhufan();
+    }
+
     //测试都匀住房
     private static void test_DouYun_douYunFang(){
         new DouYun().douYunFang();
     }
-    public static void main(String[] args){
-        test_DouYun_douYunFang();
 
+    //测试woff文件
+    private static void test_WoffTest_woff(){
+        new WoffTest().woff();
+    }
+
+    //https://blog.csdn.net/u013886628/article/details/51820221   haha
+    // 高级爬虫   模拟javascript
+
+    public static void main(String[] args){
+        test_WuBa_zhufan();
     }
 }
