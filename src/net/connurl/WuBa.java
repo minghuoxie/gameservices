@@ -8,6 +8,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WuBa {
 
@@ -62,6 +64,10 @@ public class WuBa {
     //https://www.cnblogs.com/q1ang/p/10176936.html   特殊的编码
     //https://blog.csdn.net/xx117501/article/details/86512803
     public void zhufan(){
+        List<ZhuFang> list=new ArrayList<>();
+        String perType="无";
+        String from="58";
+        int maxPrice=2000;
         con=new Conn();
         try {
             Element body=wubaZhuFang();
@@ -85,9 +91,10 @@ public class WuBa {
                     String urlType=con.getAttrValByTagAndAttr("a", "class", "strongbox","href", li);
                     zhuFang.setUrlType(urlType);
 
-                    zhuFang.setPerType("无");
-                    zhuFang.setFrom("58");
+                    zhuFang.setPerType(perType);
+                    zhuFang.setFrom(from);
                    Thread.sleep(2*1000);
+                    list.add(zhuFang);
                 }
             }
 
@@ -95,6 +102,7 @@ public class WuBa {
             e.printStackTrace();
         }
         con.close();
+        HelpDb.saveZhuFan(list,perType,maxPrice,from);
     }
 
     private String coding(String txt) throws UnsupportedEncodingException {
