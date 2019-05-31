@@ -171,10 +171,6 @@ public class OnlyMain {
         new WoffTest().woff();
     }
 
-    //https://blog.csdn.net/u013886628/article/details/51820221   haha
-    // 高级爬虫   模拟javascript
-    //https://blog.csdn.net/qq_37321253/article/details/78344802  出现java.io.IOException: CreateProcess error=2, 系统找不到指定的文件。
-
     //java调用python的测试
     private static void test_pythonOne(){
         PythonInterpreter interpreter = new PythonInterpreter();
@@ -183,7 +179,6 @@ public class OnlyMain {
        // PyObject pyobj = func.__call__(new PyInteger(2016),new PyInteger(2016));
         System.out.println("retMsg = ");
     }
-    //D:\yunzhi\py\path\python.exe D:/yunzhi/pypro/test.py
     private static void test_pythonTwo(){
         System.out.println("start python");
         //设置命令行传如参数

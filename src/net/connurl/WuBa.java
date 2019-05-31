@@ -40,10 +40,6 @@ public class WuBa {
                 }
             }
         }
-//        html.append("<!DOCTYPE html>");
-//        html.append("<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=gb2312\"/>\r\n<script>");
-//        html.append(scTxt);
-//        html.append("</script>\r\n</head><body>");
         boolean isAdd=false;
         for(int i=0;i<textScrip.length();i++){
             char ch=textScrip.charAt(i);
