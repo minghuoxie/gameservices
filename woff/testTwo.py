@@ -2,6 +2,9 @@
 ####woff字体加密防爬虫
 #### https://blog.csdn.net/xx117501/article/details/86512803
 #### https://blog.csdn.net/m0_37156322/article/details/84658872
+#####  FontCreate  打开.otf字体的软件
+
+
 import base64
 from io import BytesIO
 from fontTools.ttLib import TTFont
