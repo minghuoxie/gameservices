@@ -25,7 +25,6 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -160,6 +159,9 @@ public class OnlyMain {
     private static void test_WuBa_zhufan(){
         new WuBa().zhufan();
     }
+    private static void test_WuBa_zhuFan(){
+        new WuBa().zhuFan();
+    }
 
     //测试都匀住房
     private static void test_DouYun_douYunFang(){
@@ -202,6 +204,6 @@ public class OnlyMain {
     }
 
     public static void main(String[] args){
-        test_WuBa_zhufan();
+        test_WuBa_zhuFan();
     }
 }

@@ -2,6 +2,7 @@ package net.help;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -49,5 +50,14 @@ public class MapToObj {
             e.printStackTrace();
         }
         return t;
+    }
+
+    public static Map<String,String> strToMap(String str){
+        if(str==null){
+            return null;
+        }
+        Map<String,String> map=new HashMap<>();
+
+        return map;
     }
 }
