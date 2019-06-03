@@ -35,4 +35,21 @@ public class HelpDb {
             db.closeConn();
         }
     }
+
+    public static void saveJops(List<ZhuFang> list){
+        if(list!=null&&list.size()>0){
+            Db db = new Db();
+            for(ZhuFang z:list){
+                try {
+                    int num=db.selectCount(SqlHuiShui.finNumByTitle,new Object[]{z.getTitle()});
+                    if(num==0){
+                        db.insertDbOne(SqlHuiShui.insertDats,new Object[]{z.getTitle(),z.getPerType(),z.getPrice(),z.getUrlType(),z.getAddr(),z.getContent(),z.getFrom(),Time.getTime("yyyy-MM-dd")});
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+            db.closeConn();
+        }
+    }
 }

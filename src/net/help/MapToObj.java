@@ -60,4 +60,15 @@ public class MapToObj {
 
         return map;
     }
+
+    //对标题进行过滤。。。。
+    public static boolean isMapTitle(String title){
+        String lowTitle;
+        if(title!=null&&title.length()>0&&((lowTitle=title.toLowerCase()).contains("java")||lowTitle.contains("android")||lowTitle.contains("维护")||
+                lowTitle.contains("网络")||lowTitle.contains("程序")||lowTitle.contains("开发")||lowTitle.contains("电脑")||lowTitle.contains("计算机")||
+                lowTitle.contains("IT运维"))){
+            return true;
+        }
+        return false;
+    }
 }

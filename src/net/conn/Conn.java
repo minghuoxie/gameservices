@@ -115,16 +115,50 @@ public class Conn {
         }
         return "";
     }
+    //根据标签名称和属性名称以及父节点获取文本
+    public String getTextByTagAndAttr(String tagName,String attrName,String attrVal,String pTagName,String pAttrName,String pAttrVal,Element root){
+        if(root!=null){
+            if(pTagName.equals(root.tagName())&&pAttrVal.equals(root.attributes().get(pAttrName))){
+                return getTextByTagAndAttr(tagName,attrName,attrVal,root);
+            }else if(root.children().size()>0){
+                for(int i=0;i<root.children().size();i++){
+                    String txt=getTextByTagAndAttr(tagName,attrName,attrVal,pTagName,pAttrName,pAttrVal,root.children().get(i));
+                    if(!txt.equals("")){
+                        return txt;
+                    }
+                }
+            }
+        }
+        return "";
+    }
 
     //根据标签名称和属性名称获取其他属性值
     public String getAttrValByTagAndAttr(String tagName,String attrName,String attrVal,String muName,Element root){
         if(root!=null){
             if(tagName.equals(root.tagName())&&attrVal.equals(root.attributes().get(attrName))){
-                String re=root.attributes().get("href");
+                String re=root.attributes().get(muName);
                 return re;
             }else if(root.children().size()>0){
                 for(int i=0;i<root.children().size();i++){
                     String txt=getAttrValByTagAndAttr(tagName,attrName,attrVal,muName,root.children().get(i));
+                    if(!txt.equals("")){
+                        return txt;
+                    }
+                }
+            }
+        }
+        return "";
+    }
+
+    //根据标签获取对应的属性值
+    public String getAttrValByTag(String tagName,String muName,Element root){
+        if(root!=null){
+            if(tagName.equals(root.tagName())){
+                String re=root.attributes().get(muName);
+                return re;
+            }else if(root.children().size()>0){
+                for(int i=0;i<root.children().size();i++){
+                    String txt=getAttrValByTag(tagName,muName,root.children().get(i));
                     if(!txt.equals("")){
                         return txt;
                     }

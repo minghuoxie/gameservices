@@ -4,8 +4,11 @@ import net.conn.CallBack;
 import net.conn.Conn;
 import net.dbconnect.Db;
 import net.dbconnect.sqlstr.SqlHuiShui;
+import net.help.MapToObj;
 import net.help.Time;
 import net.pojo.ZhuFang;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -269,6 +272,101 @@ public class HuiShui {
 
         con.close();
     }
+    //http://www.huishui.ccoo.cn//post/job/
+    public void zhaopin(){
+        List<ZhuFang> list=new ArrayList<>();
+        List<String> listUrl=new ArrayList<>();
+        String topUrl=huishuiUrl;
+        Conn con=new Conn();
+        String endUrl="/post/job/";
+        /**
+         * 最新招聘
+         * */
+        try {
+            Element body=con.getBodyElement(topUrl+endUrl,huishuiEnc);
+            Element newZhaoPin=body.getElementsByClass("new-zhaopin").first();
+            Elements tjxxcenters=newZhaoPin.getElementsByClass("tjxxcenter");
+            for(int i=0;i<tjxxcenters.size();i++){
+                Element ele=tjxxcenters.get(i);
+                String title=con.getAttrValByTagAndAttr("a","class","vtip","title",ele);
+                System.out.println(topUrl+endUrl+"::"+title);
+                if(MapToObj.isMapTitle(title)){
+                    ZhuFang zhaoPin=new ZhuFang();
+                    zhaoPin.setTitle(title);
+                    zhaoPin.setUrlType(topUrl+con.getAttrValByTagAndAttr("a","class","vtip","href",ele));
+                    zhaoPin.setPrice(con.getTextByTagAndAttr("div","class","tj-yuex",ele));
+                    String addr="";
+                    zhaoPin.setContent(addr=con.getTextByTagAndAttr("em","class","ellipsis",ele));
+                    zhaoPin.setAddr(addr);
+                    zhaoPin.setFrom("惠水");
+                    zhaoPin.setPerType("招聘");
+                   // System.out.println("---"+zhaoPin);
+                    list.add(zhaoPin);
+                }
+            }
+            //保存最新招聘
+            HelpDb.saveJops(list);
+            list=null;
+            //循环招聘信息  获取urlList
+            Elements urlList=body.getElementsByClass("xleibieright").first().child(0).getElementsByTag("li");
+            for(int i=0;i<urlList.size();i++){
+                Element liEle=urlList.get(i);
+                listUrl.add(topUrl+con.getAttrValByTag("a","href",liEle));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        con.close();
+        if(listUrl!=null&&listUrl.size()>0){
+            for(String nextUrl:listUrl){
+                try {
+                    Thread.sleep(5*1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                zhaopinList(nextUrl);
+            }
+        }
+    }
+
+    private void zhaopinList(String url){
+        List<ZhuFang> list=new ArrayList<>();
+        Conn con=new Conn();
+        try{
+            Element body=con.getBodyElement(url,huishuiEnc);
+            Element ulList=body.getElementsByClass("list_zhaopin").first();
+            Elements liList=ulList.getElementsByClass("xx-mingqi");
+
+            for(int i=0;i<liList.size();i++){
+                Element liEle=liList.get(i);
+                String title=con.getAttrValByTag("a","title",liEle);
+                System.out.println(url+"::"+title);
+               if(MapToObj.isMapTitle(title)){
+                    ZhuFang zhaoPin=new ZhuFang();
+                    zhaoPin.setTitle(title);
+                    zhaoPin.setUrlType(huishuiUrl+con.getAttrValByTag("a","href",liEle));
+                    zhaoPin.setPrice(con.getTextByTagAndAttr("div","class","mq-p",liEle));
+                    String content="";
+                    content+=con.getTextByTagAndAttr("dl","class","noborder",liEle);
+                    content+=con.getTextByTagAndAttr("div","class","mq02-02","div","class","mingqi02",liEle);
+                    zhaoPin.setContent(content);
+                    zhaoPin.setAddr(con.getTextByTagAndAttr("div","class","mq02-01","div","class","mingqi03",liEle));
+                    zhaoPin.setFrom("惠水");
+                    zhaoPin.setPerType("招聘");
+                   // System.out.println("---"+zhaoPin);
+                    list.add(zhaoPin);
+                }
+            }
+            //保存最新招聘
+            HelpDb.saveJops(list);
+            list=null;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        con.close();
+    }
+
+
 }
 /**
  * <li><a href="/post/zhaopins/list-116757-0-0-0-0-0-1.html">外卖配送员</a></li>

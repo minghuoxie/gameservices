@@ -140,12 +140,6 @@ public class OnlyMain {
             }
         }
     }
-
-    //测试goMain 惠水住房
-    private static void test_GoMain_go(){
-        new GoMain().go();
-    }
-
     //测试时间
     private static void test_Time_getTime(){
        System.out.println(Time.getTime("yyyy-MM-dd"));
@@ -203,7 +197,11 @@ public class OnlyMain {
         }
     }
 
+    //测试goMain 惠水住房
+    private static void test_GoMain_go(){
+        new GoMain().go();
+    }
     public static void main(String[] args){
-        test_WuBa_zhuFan();
+        test_GoMain_go();
     }
 }
