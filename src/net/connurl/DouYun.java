@@ -4,6 +4,7 @@ import net.conn.CallBack;
 import net.conn.Conn;
 import net.dbconnect.Db;
 import net.dbconnect.sqlstr.SqlHuiShui;
+import net.help.MapToObj;
 import net.help.Time;
 import net.pojo.ZhuFang;
 import org.jsoup.nodes.Element;
@@ -15,6 +16,7 @@ import java.util.List;
 public class DouYun {
     //http://www.duyun.ccoo.cn/post/fangwu/chuzu/
     //都匀的在线住房
+    private String baseUrl;
     public void douYunFang(){
         Conn con=new Conn();
         Element body=null;
@@ -85,6 +87,63 @@ public class DouYun {
         }finally {
             con.close();
         }
+    }
+
+
+    //http://www.0854job.com/job
+    public void zhaopin(String url,String enCoding){
+        baseUrl=url;
+        String linUrl=url;
+        int connectCount=0;
+        boolean go=true;
+        while(go) {
+            if(connectCount==10){
+                break;
+            }
+            Conn con = new Conn();
+            List<ZhuFang> list=new ArrayList<>();
+            try {
+               Element body=con.getBodyElement(linUrl, enCoding);
+               //获取下一夜
+                Element nextPage=body.getElementById("hyl_Next");
+                if(nextPage!=null){
+                    linUrl=baseUrl+nextPage.attributes().get("href");
+                }else{
+                    go=false;
+                }
+
+               Elements jopsList=body.getElementsByClass("seaList").first().getElementsByTag("ul");
+               for(int i=0;i<jopsList.size();i++){
+                   Element ele=jopsList.get(i);
+                   String title=con.getAttrValByTag("li","class","li11","a",null,'C',ele);
+                   System.out.println(linUrl+"::::title:"+title);
+                   if(MapToObj.isMapTitle(title)){
+                        ZhuFang zhuFang=new ZhuFang();
+                        zhuFang.setTitle(title);
+                        zhuFang.setUrlType(baseUrl+con.getAttrValByTag("li","class","li11","a","href",'K',ele));
+                        zhuFang.setPrice(con.getAttrValByTag("li","class","li11","p",null,'C',ele));
+                        zhuFang.setAddr(con.getAttrValByTag("li","class","li11","i",null,'C',ele));
+                        zhuFang.setContent(con.getStrByTagAndAttr("li","class","li13",null,'C',ele));
+                        zhuFang.setPerType("招聘");
+                        zhuFang.setFrom("都匀");
+                        list.add(zhuFang);
+                   }
+               }
+                connectCount=0;
+            } catch (Exception e) {
+                e.printStackTrace();
+                connectCount++;
+            }
+            //保存最新招聘
+            HelpDb.saveJops(list);
+            try {
+                Thread.sleep(5*1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            con.close();
+        }
+
     }
 
 }
