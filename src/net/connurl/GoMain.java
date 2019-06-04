@@ -21,7 +21,10 @@ public class GoMain {
 
 
             //贵州163
-            new YaoLiuSan().zhaoPin("http://www.163gz.com/gzzp8/zkxx/","gb2312");
+           // new YaoLiuSan().zhaoPin("http://www.163gz.com/gzzp8/zkxx/","gb2312");
+
+            //师大
+          //  new ShiDa().shidachuangye("http://zjc.gznu.edu.cn:888/article/","utf-8"); *
             //-------------lin
         } catch (Exception e) {
             e.printStackTrace();
