@@ -11,6 +11,11 @@ public class Time {
         return format.format(date);
     }
 
+    //计算一个月的时间差
+    public static boolean isTrue(String preDate){
+        return  Integer.parseInt(getTime("MM"))-Integer.parseInt(preDate)<2;
+    }
+
     public static String addChar(String str,int index,char ch){
         String newStr="";
         boolean isAdd=true;

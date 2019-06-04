@@ -202,6 +202,6 @@ public class OnlyMain {
         new GoMain().go();
     }
     public static void main(String[] args){
-        test_GoMain_go();
+       test_GoMain_go();
     }
 }

@@ -230,6 +230,39 @@ public class Conn {
         return "";
     }
 
+    //获取指定标签下的指定标签
+    public void findElesByPTag(String pTagName,String pAttrName,String pAttrVal,String tagName,List<Element> eleList,Element root){
+        if(root!=null){
+            if(pTagName.equals(root.tagName())&&pAttrVal.equals(root.attributes().get(pAttrName))&&root.children().size()>0){
+                for(int i=0;i<root.children().size();i++){
+                    Element e=root.children().get(i);
+                    if(tagName.equals(e.tagName())){
+                        eleList.add(e);
+                    }
+                }
+            }else if(root.children().size()>0){
+                for(int i=0;i<root.children().size();i++){
+                    findElesByPTag(pTagName,pAttrName,pAttrVal,tagName,eleList,root.children().get(i));
+                }
+            }
+        }
+    }
+
+    //获取指定的标签
+    public Element findEleByTagAndAttrAndTxt(String tagName,String attrName,String attrVal,String text,Element root){
+        if(tagName.equals(root.tagName())&&attrVal.equals(root.attributes().get(attrName))&&text.equals(root.text().trim())){
+            return root;
+        }else if(root.children().size()>0){
+            for(int i=0;i<root.children().size();i++){
+                Element ele=findEleByTagAndAttrAndTxt(tagName,attrName,attrVal,text,root.children().get(i));
+                if(ele!=null){
+                    return ele;
+                }
+            }
+        }
+        return null;
+    }
+
     //根据标签名称和属性名称以及父节点获取文本
     public String getTextByTagAndAttr(String tagName,String attrName,String attrVal,String pTagName,String pAttrName,String pAttrVal,Element root){
         if(root!=null){

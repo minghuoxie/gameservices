@@ -1,6 +1,5 @@
 package net.connurl;
 
-import net.conn.CallBack;
 import net.conn.Conn;
 import net.dbconnect.Db;
 import net.dbconnect.sqlstr.SqlHuiShui;

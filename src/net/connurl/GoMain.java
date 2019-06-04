@@ -19,6 +19,9 @@ public class GoMain {
             //都匀招聘
             //new DouYun().zhaopin("http://www.0854job.com/job/","utf-8");
 
+
+            //贵州163
+            new YaoLiuSan().zhaoPin("http://www.163gz.com/gzzp8/zkxx/","gb2312");
             //-------------lin
         } catch (Exception e) {
             e.printStackTrace();

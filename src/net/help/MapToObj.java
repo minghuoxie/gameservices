@@ -71,4 +71,14 @@ public class MapToObj {
         }
         return false;
     }
+
+    //对标题进行过滤。。。
+    public static boolean isMapTitleYaoLiuSan(String title){
+        String lowTitle;
+        if(title!=null&&title.length()>0&&((lowTitle=title.toLowerCase()).contains("职业")||
+                lowTitle.contains("学校")||lowTitle.contains("惠水")||lowTitle.contains("学院"))){
+            return true;
+        }
+        return false;
+    }
 }

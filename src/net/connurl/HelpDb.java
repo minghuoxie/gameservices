@@ -4,6 +4,7 @@ import net.dbconnect.Db;
 import net.dbconnect.sqlstr.SqlHuiShui;
 import net.help.Time;
 import net.pojo.ZhuFang;
+import net.pojo.ZhuFangChild;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,23 @@ public class HelpDb {
                     int num=db.selectCount(SqlHuiShui.finNumByTitle,new Object[]{z.getTitle()});
                     if(num==0){
                         db.insertDbOne(SqlHuiShui.insertDats,new Object[]{z.getTitle(),z.getPerType(),z.getPrice(),z.getUrlType(),z.getAddr(),z.getContent(),z.getFrom(),Time.getTime("yyyy-MM-dd")});
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+            db.closeConn();
+        }
+    }
+
+    public static void saveJopsTwo(List<ZhuFangChild> list){
+        if(list!=null&&list.size()>0){
+            Db db = new Db();
+            for(ZhuFangChild z:list){
+                try {
+                    int num=db.selectCount(SqlHuiShui.finNumByTitle,new Object[]{z.getTitle()});
+                    if(num==0){
+                        db.insertDbOne(SqlHuiShui.insertDats,new Object[]{z.getTitle(),z.getPerType(),z.getPrice(),z.getUrlType(),z.getAddr(),z.getContent(),z.getFrom(),z.getAddDate()});
                     }
                 }catch (Exception e){
                     e.printStackTrace();
