@@ -66,7 +66,7 @@ public class MapToObj {
         String lowTitle;
         if(title!=null&&title.length()>0&&((lowTitle=title.toLowerCase()).contains("java")||lowTitle.contains("android")||lowTitle.contains("维护")||
                 lowTitle.contains("网络")||lowTitle.contains("程序")||lowTitle.contains("开发")||lowTitle.contains("电脑")||lowTitle.contains("计算机")||
-                lowTitle.contains("IT")||lowTitle.contains("黑客"))){
+                lowTitle.contains("IT")||lowTitle.contains("黑客")||lowTitle.contains("惠水")||lowTitle.contains("都匀")||lowTitle.contains("软件"))){
             return true;
         }
         return false;

@@ -15,7 +15,7 @@ public class ShiDa {
     public void shidachuangye(String url,String encoding){
         baseUrl=url;
         coding=encoding;
-        int index=3955;
+        int index=10000;
         List<ZhuFang> list=new ArrayList<>();
         while(index<=10000) {
             list.clear();

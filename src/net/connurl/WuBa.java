@@ -2,10 +2,14 @@ package net.connurl;
 
 import net.conn.CallBack;
 import net.conn.Conn;
+import net.help.MapToObj;
+import net.help.Time;
 import net.pojo.ZhuFang;
+import net.pojo.ZhuFangChild;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -250,5 +254,102 @@ public class WuBa {
             }
         }
         return new String(reTxt.getBytes(),"utf-8");
+    }
+
+    //58工作
+    //https://gy.58.com/ruanjiangong/?PGTID=0d202408-007d-fe8e-a7fc-34f350106fc5&ClickID=2
+
+    public void zhaopin(String url,String enCoding){
+        Conn con=new Conn();
+        List<ZhuFang> list=new ArrayList<>();
+        try {
+            Element body=con.getBodyElement(url,enCoding);
+            Elements eleLis= body.getElementById("list_con").children();
+            if(eleLis!=null&&eleLis.size()>0){
+                for(int i=0;i<eleLis.size();i++){
+                    Element li=eleLis.get(i);
+                    //(String pTagName,String pAttrName,String pAttrVal,String tagName,String muName,char type,Element root)
+                    String title=con.getAttrValByTag("div","class","job_name clearfix","a",null,'C',li);
+                    System.out.println("--"+title);
+                    if(MapToObj.isMapTitle(title)){
+                        ZhuFang zhuFang=new ZhuFang();
+                        zhuFang.setTitle(title);
+                        zhuFang.setPerType("招聘");
+                        zhuFang.setFrom("58");
+
+                        //item_con job_title
+                        zhuFang.setUrlType(con.getAttrValByTag("div","class","job_name clearfix","a","href",'K',li));
+                        zhuFang.setPrice(con.getAttrValByTag("div","class","item_con job_title","p",null,'C',li));
+                        zhuFang.setAddr(con.getAttrValByTag("div","class","comp_name","a",null,'C',li));
+                        String content="";
+                        content+=con.getTextByTagAndAttr("div","class","job_wel clearfix",li);
+                        content+=con.getTextByTagAndAttr("p","class","job_require",li);
+                        zhuFang.setContent(content);
+                        list.add(zhuFang);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        con.close();
+        HelpDb.saveJops(list);
+    }
+
+    /****************************前程无忧********************************/
+    public void qiancheng(String url,String enCoding){
+        Conn con=new Conn();
+        List<Element> eleLists=new ArrayList<>();
+        try {
+            Element body=con.getBodyElement(url,enCoding);
+            Element eleList=body.getElementsByClass("cn hlist").first();
+
+            //(String pTagName,String pAttrName,String pAttrVal,String tagName,List<Element> eleList,Element root)
+            con.findElesByPTag("div","class","e","a",eleLists,eleList);
+            if(eleLists!=null&&eleLists.size()>0){
+                for(Element e:eleLists){
+                    if(MapToObj.isMapTitle(e.text().trim())){
+                        Thread.sleep(10*1000);
+                        qianchengZhaoPing(e.attributes().get("href"),enCoding);
+                    }
+                }
+            }
+            System.out.println("end");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        con.close();
+    }
+
+    private void qianchengZhaoPing(String url,String enCoding){
+        Conn con=new Conn();
+        List<ZhuFangChild> listZhu=new ArrayList<>();
+        try {
+            Element body=con.getBodyElement(url,enCoding);
+            Elements eleList=body.getElementById("resultList").children();
+            for(Element e:eleList){
+                String title=con.getAttrValByTag("p","class","t1 ","a",null,'C',e);
+                if(MapToObj.isMapTitle(title)){
+                    ZhuFangChild zhuFang=new ZhuFangChild();
+                    zhuFang.setTitle(title);
+                    zhuFang.setPerType("招聘");
+                    zhuFang.setFrom("前程");
+
+                    zhuFang.setContent(con.getAttrValByTag("span","class","t2","a",null,'C',e));
+                    zhuFang.setUrlType(con.getAttrValByTag("span","class","t2","a","href",'K',e));
+                    zhuFang.setAddr(con.getTextByTagAndAttr("span","class","t3",e));
+                    zhuFang.setPrice(con.getTextByTagAndAttr("span","class","t4",e));
+                    String time = Time.getTime("yyyy") + "-" + con.getTextByTagAndAttr("span","class","t5",e);
+                    zhuFang.setAddDate(time);
+                    System.out.println(zhuFang);
+                    listZhu.add(zhuFang);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        con.close();
+        HelpDb.saveJopsTwo(listZhu);
     }
 }
