@@ -247,7 +247,26 @@ public class Conn {
             }
         }
     }
-
+    //获取指定标签通过文本匹配
+    public void findElesByText(String tagName,List<String> isText,List<Element> eleList,Element root){
+        if(root!=null){
+            if(tagName.equals(root.tagName())&&isHasText(isText,root.text())){
+                eleList.add(root);
+            }else if(root.children().size()>0){
+                for(int i=0;i<root.children().size();i++){
+                    findElesByText(tagName,isText,eleList,root.children().get(i));
+                }
+            }
+        }
+    }
+    private boolean isHasText(List<String> list,String str){
+        for(String s:list){
+            if(str.contains(s)){
+                return true;
+            }
+        }
+        return false;
+    }
     //获取指定的标签
     public Element findEleByTagAndAttrAndTxt(String tagName,String attrName,String attrVal,String text,Element root){
         if(tagName.equals(root.tagName())&&attrVal.equals(root.attributes().get(attrName))&&text.equals(root.text().trim())){

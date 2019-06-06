@@ -352,4 +352,61 @@ public class WuBa {
         con.close();
         HelpDb.saveJopsTwo(listZhu);
     }
+
+
+    /*******************************智联招聘************************************/
+    public void zhilianZhaoPin(String url,String enCoding){
+        Conn con=new Conn();
+        try {
+            Element body=con.getBodyElement(url,enCoding);
+            List<String> strList=new ArrayList<>();
+            strList.add("开发");
+            strList.add("android");
+            strList.add("Android");
+            strList.add("Python");
+            strList.add("python");
+            strList.add("java");
+            strList.add("Java");
+            List<Element> needEle=new ArrayList<>();
+            con.findElesByText("a",strList,needEle,body);
+
+            System.out.println("----");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        con.close();
+    }
+
+    /**
+     * js分析
+     * index.web.31be5b.js
+     *      class:zp-jobNavigater__pop--href
+     *      e.exports = {
+     *         apiDomain: "https://fe-api.zhaopin.com",
+     *         searchPageUrl: "https://sou.zhaopin.com",
+     *         homePageNav: "https://www.zhaopin.com/?flag=1",
+     *         iPageUrl: "https://i.zhaopin.com",
+     *         jobSearchNav: "https://sou.zhaopin.com",
+     *         campusRecruitNav: "//xiaoyuan.zhaopin.com",
+     *         highpinNav: "https://www.highpin.cn",
+     *         cepingNav: "https://td.zhaopin.com/",
+     *         article: "http://article.zhaopin.com",
+     *         industrySeek: "https://www.zhaopin.com/jobseeker/index_industry.html",
+     *         zhaopin: "https://www.zhaopin.com",
+     *         sou: "https://sou.zhaopin.com",
+     *         jianliCenter: "https://my.zhaopin.com",
+     *         resumeDownload: "https://i.zhaopin.com",
+     *         resumeUpload: "https://i.zhaopin.com",
+     *         newHomePageNav: "https://www.zhaopin.com",
+     *         shangbanNav: "https://zq.zhaopin.com",
+     *         overseaNav: "https://overseas.zhaopin.com/",
+     *         enterpriseRegisterUrl: "https://rd5.zhaopin.com/custom/register?za=2&ps=1",
+     *         statSdkUrl: "//common-bucket.zhaopin.cn/js/zpfe-stat-sdk/zpfe-stat-sdk-latest.js",
+     *         zpPassportWidgetUrl: "//common-bucket.zhaopin.cn/js/zp-passport-widget/zp-passport-widget-latest.js",
+     *         stage: "PRODUCTION"
+     *     }
+     *
+     *
+     * https://www.cnblogs.com/davidwang456/articles/8693050.html
+     * **/
 }
