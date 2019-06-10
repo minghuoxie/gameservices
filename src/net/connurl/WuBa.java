@@ -377,6 +377,21 @@ public class WuBa {
         con.close();
     }
 
+
+
+    //http://tieba.baidu.com/f?kw=%BB%DD%CB%AE&tpl=5
+    public void testTieBa(String url,String enCoding){
+        Conn con=new Conn();
+        try{
+            Element body=con.getBodyElement(url,enCoding);
+            Element ulId=body.getElementById("thread_list");
+            System.out.println("----END");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        con.close();
+    }
+
     /**
      * js分析
      * index.web.31be5b.js

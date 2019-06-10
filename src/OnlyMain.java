@@ -202,6 +202,11 @@ public class OnlyMain {
         new GoMain().go();
     }
     public static void main(String[] args){
-       test_GoMain_go();
+        test_GoMain_go();
+    }
+
+    private static void sub(){
+        String str="<ul id='thread_list' >";
+        System.out.println(str.substring(0,20));
     }
 }
