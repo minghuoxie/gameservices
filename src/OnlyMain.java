@@ -17,6 +17,7 @@ import org.python.core.PyFunction;
 import org.python.core.PyInteger;
 import org.python.core.PyObject;
 import org.python.util.PythonInterpreter;
+import unicode.ChinaUtf;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -202,11 +203,35 @@ public class OnlyMain {
         new GoMain().go();
     }
     public static void main(String[] args){
-        test_GoMain_go();
+        //test_GoMain_go();
+       // ChinaUtf.saveToFile("D:/Temp/unicode.txt");
+
+        ChinaUtf.testFindStrs("谢仕超");
+        //ChinaUtf.randomChines();
+
+        //addSum();
     }
 
     private static void sub(){
         String str="<ul id='thread_list' >";
         System.out.println(str.substring(0,20));
+    }
+
+    //引用类型
+    private static void addSum(){
+        List<Integer> list=new ArrayList<>();
+
+        list.add(new Integer(1));
+        list.add(new Integer(2));
+        list.add(new Integer(3));
+        list.add(new Integer(4));
+        Integer sum=0;
+        for(int i=0;i<list.size();i++){
+            sum+=list.get(i);
+            list.set(i,sum);
+        }
+        for(int i=0;i<list.size();i++){
+            System.out.println(list.get(i));
+        }
     }
 }

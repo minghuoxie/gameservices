@@ -18,14 +18,17 @@ public class GoMain {
             //58住房
 //            new WuBa().zhuFan();
 //            System.out.println("--------3");
+            while(true) {
 
-            new YaoLiuSan().zhaoPin("http://www.163gz.com/gzzp8/zkxx/","gb2312");
-            new DouYun().zhaopin("http://www.0854job.com/job/","utf-8");
-            new WuBa().zhuFan();
-            new HuiShui("http://www.huishui.ccoo.cn","gb2312").zhaopin();
-            new HuiShui("http://www.huishui.ccoo.cn","utf-8").huishuihomechuzhu();
-            new WuBa().zhaopin("https://gy.58.com/ruanjiangong/?PGTID=0d202408-007d-fe8e-a7fc-34f350106fc5&ClickID=2","utf-8");
-            new WuBa().qiancheng("https://www.51job.com","gb2312");
+                new YaoLiuSan().zhaoPin("http://www.163gz.com/gzzp8/zkxx/", "gb2312");
+                new DouYun().zhaopin("http://www.0854job.com/job/", "utf-8");
+                new WuBa().zhuFan();
+                new HuiShui("http://www.huishui.ccoo.cn", "gb2312").zhaopin();
+                new HuiShui("http://www.huishui.ccoo.cn", "utf-8").huishuihomechuzhu();
+                new WuBa().zhaopin("https://gy.58.com/ruanjiangong/?PGTID=0d202408-007d-fe8e-a7fc-34f350106fc5&ClickID=2", "utf-8");
+                new WuBa().qiancheng("https://www.51job.com", "gb2312");
+                Thread.sleep(5*60*60*1000);
+            }
 
           //  new WuBa().zhilianZhaoPin("https://www.zhaopin.com","utf-8");
             /**https://sou.zhaopin.com/?jl=822&kw=Java开发&kt=3*/
@@ -44,7 +47,9 @@ public class GoMain {
           //  new ShiDa().shidachuangye("http://zjc.gznu.edu.cn:888/article/","utf-8"); *
            // System.out.println("--------6");
             //-------------lin
-            new WuBa().testTieBa("http://tieba.baidu.com/f?kw=%BB%DD%CB%AE&tpl=5","utf-8");
+
+
+            //new WuBa().testTieBa("http://tieba.baidu.com/f?kw=%BB%DD%CB%AE&tpl=5","utf-8");
 
         } catch (Exception e) {
             e.printStackTrace();
