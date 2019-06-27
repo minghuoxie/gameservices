@@ -18,9 +18,13 @@ import org.python.core.PyInteger;
 import org.python.core.PyObject;
 import org.python.util.PythonInterpreter;
 import unicode.ChinaUtf;
+import unicode.Each;
+import unicode.UnicodeTest;
+import unicode.UtfBa;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -202,15 +206,60 @@ public class OnlyMain {
     private static void test_GoMain_go(){
         new GoMain().go();
     }
-    public static void main(String[] args){
+
+    //测试GBK编码
+    private static void test_ChinaUtf(){
         //test_GoMain_go();
-       // ChinaUtf.saveToFile("D:/Temp/unicode.txt");
+        // ChinaUtf.saveToFile("D:/Temp/unicode.txt");
 
         ChinaUtf.testFindStrs("谢仕超");
         //ChinaUtf.randomChines();
-
-        //addSum();
     }
+
+
+    //进制转换测试
+    private static void test_Each(){
+        //二级制转十进制
+       //String ss=Each.etoo("1111011111",10);
+        // //二级制转十六进制
+        //String str=Each.etoo("1111011111",16);
+
+        //十进制转二进制
+       String stoe=Each.stoo("129",16);
+
+        //十六进制转二进制
+       // String erltoo=Each.ltoo("03DF",2);
+        //十六进制转十进制
+       // String sltoo=Each.ltoo("03DF",10);
+
+       System.out.println(stoe);
+    }
+    //测试unicode编码
+    private static void test_UnicodeTest(){
+        /**
+         * 46   129   ⺁
+         * 0x2E 0x81 ⺁
+         * \u2e81
+         * 46 224 -46 255 没有编码
+         * 47 214 -47 255 没有编码
+         *
+         *
+         * */
+        try {
+            //  UnicodeTest.saveFile("D:/Temp/unicode.txt");
+           // UnicodeTest.testFind("谢");
+           // String s=UnicodeTest.eachCodef("谢");
+            String s=UnicodeTest.codeEach("\\u8C26");
+            System.out.println(s);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void main(String[] args){
+        test_UnicodeTest();
+    }
+
+
 
     private static void sub(){
         String str="<ul id='thread_list' >";

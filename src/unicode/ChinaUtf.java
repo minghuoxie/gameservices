@@ -114,7 +114,7 @@ public class ChinaUtf {
                 try {
                     String str = new String(buf, "GBK");
                     if(findStr.equals(str)) {
-                        return "[区号:" + quhao + "    高位字节:" + getToHex(Integer.toHexString(buf[0])) + "(" + getToBia(Integer.toBinaryString(buf[0])) + ")    低位字节:" + getToHex(Integer.toHexString(buf[1])) + "(" + getToBia(Integer.toBinaryString(buf[1])) + ")     " + i + ":" + str + "]";
+                        return "[gbk-区号:" + quhao + "    高位字节:" + getToHex(Integer.toHexString(buf[0])) + "(" + getToBia(Integer.toBinaryString(buf[0])) + ")    低位字节:" + getToHex(Integer.toHexString(buf[1])) + "(" + getToBia(Integer.toBinaryString(buf[1])) + ")     " + i + ":" + str + "]";
                     }
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
@@ -194,4 +194,7 @@ public class ChinaUtf {
         }
         return "0x"+str.substring(str.length()-2);
     }
+
+    //计算二级制
+
 }
