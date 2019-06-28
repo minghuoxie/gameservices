@@ -249,14 +249,32 @@ public class OnlyMain {
             //  UnicodeTest.saveFile("D:/Temp/unicode.txt");
            // UnicodeTest.testFind("谢");
            // String s=UnicodeTest.eachCodef("谢");
-            String s=UnicodeTest.codeEach("\\u8C26");
+            String s=UnicodeTest.codeEach("\\u4E25");
             System.out.println(s);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
     }
+
+    //utf-8编码
+    private static void test_UtfBa(){
+        try {
+           // UtfBa.testOneByte();
+//            UtfBa.testPrintUTFONE("D:/Temp/utf8.txt");
+//            UtfBa.testPrintUTFTWO("D:/Temp/utf8.txt");
+//            UtfBa.testPringUTFSAN("D:/Temp/utf8.txt");
+           String findCode=UtfBa.testFindCode("㱼");
+           System.out.println("--:"+findCode);
+
+           String findStr=UtfBa.testFindStr("E3B1BC");
+           System.out.println("---:"+findStr);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
     public static void main(String[] args){
-        test_UnicodeTest();
+        test_UtfBa();
+       // System.out.println(Each.stoo("36",16));
     }
 
 
@@ -274,7 +292,7 @@ public class OnlyMain {
         list.add(new Integer(2));
         list.add(new Integer(3));
         list.add(new Integer(4));
-        Integer sum=0;
+        Integer sum=new Integer(0);
         for(int i=0;i<list.size();i++){
             sum+=list.get(i);
             list.set(i,sum);
