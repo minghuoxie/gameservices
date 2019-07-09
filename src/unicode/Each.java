@@ -84,6 +84,30 @@ public class Each {
         return "转换类型错误";
     }
 
+    //带符号转换  补码=原码-->反码+1
+    /**
+     *1100 0011---表示正数195 也可以表示负数 195-256=-61
+     *11000011的补码是多少
+     * 11111111 11000011 00111100
+     *
+     * 11000011变为-61的过程
+     * 11000011-1---11000010---00111101
+     *
+     * */
+    public static String etoo(String stre){
+        //int类型
+        for(int i=0;i<stre.length();i++){
+            if(stre.charAt(i)!='0'&&stre.charAt(i)!='1'){
+                return "二级制字符串有误";
+            }
+        }
+        if(stre.charAt(0)=='0'){
+            return etoo(stre,10);
+        }else{
+            return "-"+(256-Integer.parseInt(etoo(stre,10)));
+        }
+    }
+    //无符号转换
     public static String etoo(String stre,int type){
         /**
          * 二级制转其他进制  type=10  转10禁止  type=16  转十六进制

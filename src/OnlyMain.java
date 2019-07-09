@@ -212,8 +212,10 @@ public class OnlyMain {
         //test_GoMain_go();
         // ChinaUtf.saveToFile("D:/Temp/unicode.txt");
 
-        ChinaUtf.testFindStrs("谢仕超");
+        ChinaUtf.testFindStrs("你好啊，大哥，，，，五五五五，，，刚刚聊");
         //ChinaUtf.randomChines();
+        // 44
+        // 38+4+8
     }
 
 
@@ -263,18 +265,17 @@ public class OnlyMain {
 //            UtfBa.testPrintUTFONE("D:/Temp/utf8.txt");
 //            UtfBa.testPrintUTFTWO("D:/Temp/utf8.txt");
 //            UtfBa.testPringUTFSAN("D:/Temp/utf8.txt");
-           String findCode=UtfBa.testFindCode("㱼");
+           String findCode=UtfBa.testFindCode("中");
            System.out.println("--:"+findCode);
-
-           String findStr=UtfBa.testFindStr("E3B1BC");
-           System.out.println("---:"+findStr);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
     }
     public static void main(String[] args){
-        test_UtfBa();
-       // System.out.println(Each.stoo("36",16));
+        //11000011
+        //00111101
+        String ss=Each.etoo("11000011");
+        System.out.println("===:"+ss);
     }
 
 
