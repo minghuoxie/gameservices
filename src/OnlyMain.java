@@ -1,3 +1,6 @@
+import media.image.ImageTest;
+import media.image.SetBgColor;
+import media.media.TestMain;
 import net.conn.WoffTest;
 import net.connurl.DouYun;
 import net.connurl.GoMain;
@@ -17,6 +20,9 @@ import org.python.core.PyFunction;
 import org.python.core.PyInteger;
 import org.python.core.PyObject;
 import org.python.util.PythonInterpreter;
+import study.Basebean;
+import study.ChildBean;
+import study.NoBaseBean;
 import unicode.ChinaUtf;
 import unicode.Each;
 import unicode.UnicodeTest;
@@ -271,13 +277,29 @@ public class OnlyMain {
             e.printStackTrace();
         }
     }
+
+    private static void test_SetBgColor(){
+       // SetBgColor.setBgColort(210,"D:\\Temp\\img\\test.jpg","D:\\Temp\\img\\ntest.png");
+        SetBgColor.setImage("D:\\Temp\\img\\rangTwo.jpg");
+    }
     public static void main(String[] args){
-        //11000011
-        //00111101
-        String ss=Each.etoo("11000011");
-        System.out.println("===:"+ss);
+        System.out.println("------------------start-------------------");
+        test_SetBgColor();
+        System.out.println("------------------end-------------------");
+//        ImageTest.readFile("D:\\Temp\\img\\lxyone.jpg");
+//        //2147483648-15195862=2132287786
+//        //2132287786=1111111000110000010000100101010
+//        //
+//
+//        String ss=Each.etoo("11111111",10);
+//        String stoe=Each.stoo("2132287785",2);
+//        System.out.println(ss);
     }
 
+    //11111111111111111111111111111111  2147483647
+    //00000000111001111101111011010110  15195862
+    //11111111 00011000 00100001 00101010   2132287786   RGB(24,33,42)
+    //11111111000110000010000100101001   2132287785
 
 
     private static void sub(){
