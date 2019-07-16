@@ -4,9 +4,10 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.Random;
+import java.util.List;
 
 public class SetBgColor {
     /**
@@ -63,6 +64,76 @@ public class SetBgColor {
             e.printStackTrace();
         }
     }
+    private static String readTxtFile(String filePath){
+        try {
+            BufferedReader reader=new BufferedReader(new FileReader(filePath));
+            StringBuffer buffer=new StringBuffer();
+            String line="";
+            while((line=reader.readLine())!=null){
+                buffer.append(line);
+            }
+            reader.close();
+            return buffer.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+    private static List<String> readTextFiles(String filePath){
+        String str=readTxtFile(filePath).trim();
+        if(str.length()>0){
+            List<String> list=new ArrayList<>();
+            String linStr="";
+            for(int i=0;i<str.length();i++){
+                char ch=str.charAt(i);
+                if(ch==' '){
+                    list.add(linStr);
+                    linStr="";
+                }
+                linStr+=ch;
+            }
+            return list;
+        }
+        return null;
+    }
+    public static void setImage(String testImageFile,String fileImage,String saveFilePath){
+        Random rand = new Random();
+        try{
+            List<String> ListStr=readTextFiles(fileImage);
+            if(ListStr!=null&&ListStr.size()>0) {
+                int index=0;
+                BufferedImage image = ImageIO.read(new File(testImageFile));
+                int width = image.getWidth();
+                int height = image.getHeight();
+                int arr[] = new int[3];
+                // BufferedImage.TYPE_3BYTE_BGR
+                BufferedImage writeImage = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
+                Graphics2D g2d = (Graphics2D) writeImage.getGraphics();
+                for (int y = 0; y < writeImage.getHeight(); y++) {
+                    for (int x = 0; x < writeImage.getWidth(); x++,index++) {
+//                        if (x >= 100 && x <= 300 && y >= 100 && y <= 200) {
+//                            arr[0] = 200;
+//                            arr[1] = 200;
+//                            arr[2] = 300;
+//                        } else {
+//                            arr[0] = rand.nextInt(255);//[0-255)
+//                            arr[1] = rand.nextInt(255);
+//                            arr[2] = rand.nextInt(255);
+//                        }
+                        if(index<ListStr.size()) {
+                            //int rgb = (255 << 24) | (arr[0] << 16) + (arr[1] << 8) + arr[2];
+                            int rgb=(Integer.parseInt(ListStr.get(index).trim()));
+                            writeImage.setRGB(x, y, rgb);
+                        }
+                    }
+                }
+                g2d.drawImage(writeImage, 0, 0, null);
+                ImageIO.write(writeImage, "jpg", new File(saveFilePath));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     public static void setBgColort(int scolorRange,String filePath,String newFilePath){
         colorRange=scolorRange;
         try {
@@ -100,6 +171,23 @@ public class SetBgColor {
             ImageIO.write(bufferedImage, "png", new File(newFilePath));
            System.out.println("完成画图");
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void readImage(String filePath){
+        try{
+            BufferedImage image=ImageIO.read(new File(filePath));
+            StringBuffer buffer=new StringBuffer();
+            for(int y=image.getMinY();y<image.getHeight();y++){
+                for(int x=image.getMinX();x<image.getWidth();x++){
+                    int rgb=image.getRGB(x,y);
+                    buffer.append(rgb+" ");
+                }
+            }
+            BufferedWriter writer=new BufferedWriter(new FileWriter("D:/Temp/img/lxyonecolor.txt"));
+            writer.write(buffer.toString());
+            writer.close();
+        }catch (Exception e){
             e.printStackTrace();
         }
     }

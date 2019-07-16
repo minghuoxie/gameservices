@@ -27,6 +27,9 @@ import unicode.ChinaUtf;
 import unicode.Each;
 import unicode.UnicodeTest;
 import unicode.UtfBa;
+import unicode.myhuffmancode.CreateHuffmanShu;
+import unicode.myhuffmancode.HufNode;
+import unicode.myhuffmancode.MyHuffmanList;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -36,6 +39,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -279,21 +283,101 @@ public class OnlyMain {
     }
 
     private static void test_SetBgColor(){
+        //   https://blog.csdn.net/STN_LCD/article/details/78629055   JPEG的解码过程
+
        // SetBgColor.setBgColort(210,"D:\\Temp\\img\\test.jpg","D:\\Temp\\img\\ntest.png");
-        SetBgColor.setImage("D:\\Temp\\img\\rangTwo.jpg");
+      //  SetBgColor.setImage("D:\\Temp\\img\\rangTwo.jpg");
+
+        SetBgColor.setImage("D:/Temp/img/lxyone.jpg","D:/Temp/img/lxyonecolor.txt","D:/Temp/img/lxyonecolor.jpg");
+
+       // SetBgColor.readImage("D:/Temp/img/lxyone.jpg");
+    }
+    private static void test_MyHuffmanList_test(){
+        HufNode nodeA=new HufNode(null,null,"A",5);
+        HufNode nodeB=new HufNode(null,null,"B",4);
+        HufNode nodeC=new HufNode(null,null,"C",7);
+        HufNode nodeD=new HufNode(null,null,"D",6);
+        HufNode nodeE=new HufNode(null,null,"E",3);
+
+        MyHuffmanList list1=new MyHuffmanList();
+        list1.addNode(nodeB,nodeE); //7
+        MyHuffmanList list2=new MyHuffmanList();
+        list2.addNode(nodeA,nodeD);//11
+        MyHuffmanList list3=new MyHuffmanList();
+        list3.addNode(nodeC,list1.getFirstNode()); //14
+        MyHuffmanList list4=new MyHuffmanList();
+        list4.addNode(list2.getFirstNode(),list3.getFirstNode());
+        //0走左结点  1走又结点   读到具有字符code的结点再从新循环
+        //10:C  00:A 01:D 111:E 110:B
+        String code="100010000100111000111001110000111010110111";
+        String setCode="";
+        StringBuffer strBuffer=new StringBuffer();
+        for(int i=0;i<code.length();i++){
+            char ch=code.charAt(i);
+            HufNode linNode=list4.getNextNode(ch);
+            setCode+=ch;
+            if(linNode.getCode()!=null&&!linNode.getCode().equals("")){
+                strBuffer.append(linNode.getCode());
+                list4.setNextNode();
+                setCode+=",";
+            }
+        }
+        System.out.println(setCode);
+        System.out.println(strBuffer.toString());
+        System.out.println("-------------end-------------");
+    }
+    private static void test_MyHuffmanList_Create(){
+        List<HufNode> list=new LinkedList<>();
+        HufNode nodeA=new HufNode(null,null,"A",5);
+        HufNode nodeB=new HufNode(null,null,"B",4);
+        HufNode nodeC=new HufNode(null,null,"C",7);
+        HufNode nodeD=new HufNode(null,null,"D",6);
+        HufNode nodeE=new HufNode(null,null,"E",3);
+        list.add(nodeA);
+        list.add(nodeB);
+        list.add(nodeC);
+        list.add(nodeD);
+        list.add(nodeE);
+        MyHuffmanList hufList= CreateHuffmanShu.createHufByNode(list);
+        String co=hufList.getCode("100010000100111000111001110000111010110111");
+        //100010000100111000111001110000111010110111
+        //100010000100111000111001110000111010110111
+        System.out.println("解码:"+co);
+        String setCode=hufList.setCode(co);
+        System.out.println("编码:"+setCode);
+        System.out.println("-------------end-------------");
+    }
+
+    private static void test_MyHuffmanList_error(){
+        String s="BT";
+        List<HufNode> list=new LinkedList<>();
+        HufNode nodeA=new HufNode(null,null,"A",5);
+        HufNode nodeB=new HufNode(null,null,"B",4);
+        HufNode nodeC=new HufNode(null,null,"C",7);
+        HufNode nodeD=new HufNode(null,null,"D",6);
+        HufNode nodeE=new HufNode(null,null,"E",3);
+        list.add(nodeA);
+        list.add(nodeB);
+        list.add(nodeC);
+        list.add(nodeD);
+        list.add(nodeE);
+        MyHuffmanList hufList= CreateHuffmanShu.createHufByNode(list);
+        String setCode=hufList.setCode(s);
+        System.out.println("编码:"+setCode);
+        System.out.println("-------------end-------------");
+    }
+    private static void test_MyHuffmanList(){
+        try{
+            test_MyHuffmanList_Create();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
     public static void main(String[] args){
-        System.out.println("------------------start-------------------");
-        test_SetBgColor();
-        System.out.println("------------------end-------------------");
-//        ImageTest.readFile("D:\\Temp\\img\\lxyone.jpg");
-//        //2147483648-15195862=2132287786
-//        //2132287786=1111111000110000010000100101010
-//        //
-//
-//        String ss=Each.etoo("11111111",10);
-//        String stoe=Each.stoo("2132287785",2);
-//        System.out.println(ss);
+        System.out.println("---------------------start---------------------------");
+        test_MyHuffmanList_error();
+      //  Integer.parseInt("-9210235");
+        System.out.println("---------------------end---------------------------");
     }
 
     //11111111111111111111111111111111  2147483647
