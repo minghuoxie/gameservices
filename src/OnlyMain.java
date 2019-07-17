@@ -379,7 +379,10 @@ public class OnlyMain {
         //SetBgColor.changeImageBig("D:/Temp/img/img20190717/lxyone.jpg","D:/Temp/img/img20190717/changeOnelxyone.jpg");
         try {
             //SetBgColor.dctEach("D:/Temp/img/img20190717/changeOnelxyone.jpg");
-            SetBgColor.dctSaveImg("D:/Temp/img/img20190717/changeOnelxyone.jpg","D:/Temp/img/img20190717/dcttlxyone.jpg");
+           // SetBgColor.dctSaveImg("D:/Temp/img/img20190717/changeOnelxyone.jpg","D:/Temp/img/img20190717/dcttlxyone.jpg");
+          //  SetBgColor.imgEblock("D:/Temp/img/img20190717/dct/lxyone.jpg","D:/Temp/img/img20190717/dct/elxyone.jpg");
+            //SetBgColor.imgEblock("D:/Temp/img/img20190717/dct/elxyone.jpg");
+            SetBgColor.dctEach("D:/Temp/img/img20190717/dct/elxyone01.jpg",'n','n');
         } catch (IOException e) {
             e.printStackTrace();
         }

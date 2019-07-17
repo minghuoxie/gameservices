@@ -312,6 +312,13 @@ public class SetBgColor {
                 iMatrix[i][j]=(double)(rgbs[i*imgMin+j]);
             }
         }
+        for(int i=0;i<imgMin;i++){
+            for(int j=0;j<imgMin;j++){
+                System.out.print(iMatrix[i][j]+" ");
+            }
+            System.out.println();
+        }
+        System.out.println("-------------------------------------------------------------------");
         double[][] quotient=coefficient();//求系数矩阵
         double[][] quotientt=transposingMatrix(quotient);//转置矩阵
         double[][] temp=matrixMultiply(quotient,iMatrix);
@@ -325,6 +332,12 @@ public class SetBgColor {
             for(int j=0;j<imgMin;j++){
                 newpix[i*imgMin+j]=(int)iMatrix[i][j];
             }
+        }
+        for(int i=0;i<imgMin;i++){
+            for(int j=0;j<imgMin;j++){
+                System.out.print(iMatrix[i][j]+" ");
+            }
+            System.out.println();
         }
         if(save=='y'){
             txtSave(newpix,"D:/Temp/img/img20190717/dctlxyone.txt");
@@ -399,5 +412,49 @@ public class SetBgColor {
         BufferedWriter writer=new BufferedWriter(new FileWriter(saveFile));
         writer.write(buffer.toString());
         writer.close();
+    }
+
+
+    //--------------------------------------------------------//
+    public static void imgEblock(String filePath,String saveFile) throws IOException {
+        int prx=240;
+        BufferedImage image=ImageIO.read(new File(filePath));
+        BufferedImage nImage=new BufferedImage(prx,prx,BufferedImage.TYPE_3BYTE_BGR);
+        for(int y=0;y<prx;y++){
+            for(int x=0;x<prx;x++){
+                nImage.setRGB(x,y,image.getRGB(x,y));
+            }
+        }
+        ImageIO.write(nImage,"jpg",new File(saveFile));
+    }
+
+    //将图像按照8像素划分
+    public static void imgEblock(String filePath)throws IOException{
+        BufferedImage image=ImageIO.read(new File(filePath));
+        BufferedImage writerImage=new BufferedImage(8,8,BufferedImage.TYPE_3BYTE_BGR);
+        int inx=0;
+        int iny=0;
+        boolean is=true;
+        d:while(true) {
+            is=true;
+            q:for (int y = 0; y < 8; y++) {
+                for (int x = 0; x < 8; x++) {
+                    if((inx*8+x)>=image.getWidth()){
+                        iny++;
+                        inx=0;
+                        is=false;
+                        break q;
+                    }
+                    if(((inx*8+x)*(iny*8+y))>=image.getWidth()*image.getHeight()){
+                        break d;
+                    }
+                    writerImage.setRGB(x, y, image.getRGB(inx*8+x,iny*8+y));
+                }
+            }
+            if(is) {
+                ImageIO.write(writerImage, "jpg", new File("D:/Temp/img/img20190717/dct/elxyone" + inx+iny + ".jpg"));
+                inx++;
+            }
+        }
     }
 }
