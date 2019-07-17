@@ -134,6 +134,25 @@ public class SetBgColor {
             e.printStackTrace();
         }
     }
+    public static void changeImageBig(String filePath,String saveFile){
+        try{
+            BufferedImage image=ImageIO.read(new File(filePath));
+            int min=image.getWidth()>image.getHeight()?image.getHeight():image.getWidth();
+            BufferedImage newImage=new BufferedImage(min,min,BufferedImage.TYPE_3BYTE_BGR);
+            Graphics2D g2d=(Graphics2D)newImage.getGraphics();
+            for(int y=image.getMinY();y<min;y++){
+                for(int x=image.getMinX();x<min;x++){
+                    //int rgb=(255<<16)|(255<<8)|255;
+                    int rgb=image.getRGB(x,y);
+                    newImage.setRGB(x,y,rgb);
+                }
+            }
+            g2d.drawImage(newImage, 0, 0, null);
+            ImageIO.write(newImage,"jpg",new File(saveFile));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     public static void setBgColort(int scolorRange,String filePath,String newFilePath){
         colorRange=scolorRange;
         try {
@@ -199,5 +218,186 @@ public class SetBgColor {
             return true;
         }
         return false;
+    }
+
+
+    //https://www.cnblogs.com/leaven/archive/2010/04/06/1705846.html
+    //http://blog.sina.com.cn/s/blog_7445c2940102wcdl.html   DCT?????????
+
+    //https://blog.csdn.net/luoweifu/article/details/8214959
+    /**
+     * RGB颜色空间模型和YCbCr空间模型的转换
+     *
+     * R=Y+1.402(Cr-128)
+     * G=Y-0.34414(Cb-128)-0.71414(Cr-128)
+     * B=Y+1.772(Cb-128)
+     *
+     *
+     * */
+    public static void yuvToRGB(String yueFilePath,String rgbFilePath){
+        try{
+            BufferedImage image=ImageIO.read(new File(yueFilePath));
+            for(int y=image.getMinY();y<image.getHeight();y++){
+                for(int x=image.getMinX();x<image.getWidth();x++){
+                    int yuv=image.getRGB(x,y);
+                    int Y=(yuv&0xFF0000)>>16;
+                    int Cb=(yuv&0x00FF00)>>8;
+                    int Cr=yuv&0x0000FF;
+
+                    int R=(int)(Y+1.402*(Cr-128));
+                    int G=(int)(Y-0.34414*(Cb-128)-0.71414*(Cr-128));
+                    int B=(int)(Y+1.772*(Cb-128));
+                    int newRgb=(R<<16)|(G<<8)|B;
+                    image.setRGB(x,y,newRgb);
+                }
+            }
+            ImageIO.write(image,"jpg",new File(rgbFilePath));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    /**
+     * Y=0.299R+0.587G+0.114B
+     * Cb=-0.1687R-0.3313G+0.5B+128
+     * Cr=0.5R-0.4187G-0.0813B+128
+     *
+     *
+     * */
+    public static void rgbToYUV(String rgbFilePath,String yuvFilePath){
+        try{
+            BufferedImage image=ImageIO.read(new File(rgbFilePath));
+            for(int y=image.getMinY();y<image.getHeight();y++){
+                for(int x=image.getMinX();x<image.getWidth();x++){
+                    int rgb=image.getRGB(x,y);
+                    int r=(rgb&0xFF0000)>>16;
+                    int g=(rgb&0x00FF00)>>8;
+                    int b=rgb&0x0000FF;
+
+                    int Y=(int)(0.299*r+0.587*g+0.114*b);
+                    int Cb=(int)(-0.1687*r-0.3313*g+0.5*b+128);
+                    int Cr=(int)(0.5*r-0.4187*g-0.0813*b+128);
+                    int newRgb=(Y<<16)|(Cb<<8)|Cr;
+                    image.setRGB(x,y,newRgb);
+                }
+            }
+            ImageIO.write(image,"jpg",new File(yuvFilePath));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    private static int imgMin=0;
+    public static void dctSaveImg(String filePath,String savePath) throws IOException {
+        int[] rgbs=dctEach(filePath,'n','y');
+        BufferedImage img=new BufferedImage(imgMin,imgMin,BufferedImage.TYPE_3BYTE_BGR);
+        for(int y=0;y<imgMin;y++){
+            for(int x=0;x<imgMin;x++){
+                img.setRGB(x,y,rgbs[y*imgMin+x]);
+            }
+        }
+        ImageIO.write(img,"jpg",new File(savePath));
+    }
+    /**
+     * 求图片的DCT变换
+     *
+     * */
+    public static int[] dctEach(String filePath,char type,char save) throws IOException {
+        int[] rgbs=getRGBS(filePath);
+        if(save=='y'){
+            txtSave(rgbs,"D:/Temp/img/img20190717/changeOnelxyone.txt");
+        }
+        double[][] iMatrix=new double[imgMin][imgMin];
+        //将原图的一维矩阵转换为二维矩阵
+        for(int i=0;i<imgMin;i++){
+            for(int j=0;j<imgMin;j++){
+                iMatrix[i][j]=(double)(rgbs[i*imgMin+j]);
+            }
+        }
+        double[][] quotient=coefficient();//求系数矩阵
+        double[][] quotientt=transposingMatrix(quotient);//转置矩阵
+        double[][] temp=matrixMultiply(quotient,iMatrix);
+        iMatrix=matrixMultiply(temp,quotientt);
+        int[] newpix=new int[imgMin*imgMin];
+        if(type=='y'){
+            temp=matrixMultiply(quotientt,iMatrix);
+            iMatrix=matrixMultiply(temp,quotient);
+        }
+        for(int i=0;i<imgMin;i++){
+            for(int j=0;j<imgMin;j++){
+                newpix[i*imgMin+j]=(int)iMatrix[i][j];
+            }
+        }
+        if(save=='y'){
+            txtSave(newpix,"D:/Temp/img/img20190717/dctlxyone.txt");
+        }
+        return newpix;
+
+    }
+
+    //矩阵相乘
+    private static double[][] matrixMultiply(double[][] A,double[][] B){
+        double[][] nMatrix=new double[imgMin][imgMin];
+        double t=0.0;
+        for(int i=0;i<imgMin;i++){
+            for(int j=0;j<imgMin;j++){
+                t=0;
+                for(int k=0;k<imgMin;k++){
+                    t+=A[i][k]*B[k][j];
+                }
+                nMatrix[i][j]=t;
+            }
+        }
+        return nMatrix;
+    }
+
+    //转置矩阵
+    private static double[][] transposingMatrix(double[][] matrix){
+        double[][] nMatrix=new double[imgMin][imgMin];
+        for(int i=0;i<imgMin;i++){
+            for(int j=0;j<imgMin;j++){
+                nMatrix[i][j]=matrix[j][i];
+            }
+        }
+        return nMatrix;
+    }
+    //求离散余弦变换的系数矩阵
+    private static double[][] coefficient(){
+        double[][] coeff=new double[imgMin][imgMin];
+        double sqrt=1.0/Math.sqrt(imgMin);
+        for(int i=0;i<imgMin;i++){
+            coeff[0][i]=sqrt;
+        }
+        for(int i=1;i<imgMin;i++){
+            for(int j=0;j<imgMin;j++){
+                coeff[i][j]=Math.sqrt(2.0/imgMin)*Math.cos(i*Math.PI*(j+0.5)/(double)imgMin);
+            }
+        }
+        return coeff;
+    }
+    private static int[] getRGBS(String filePath) throws IOException {
+        BufferedImage image=ImageIO.read(new File(filePath));
+        imgMin=image.getWidth()>image.getHeight()?image.getHeight():image.getWidth();
+        int[] rgbs=new int[imgMin*imgMin];
+        for(int y=image.getMinY();y<imgMin;y++){
+            for(int x=image.getMinX();x<imgMin;x++){
+                rgbs[y*imgMin+x]=image.getRGB(x,y);
+            }
+        }
+//        for(int i=0;i<rgbs.length;i++){
+//            System.out.print(rgbs[i]+" ");
+//            if(i%imgMin==0&&i!=0){
+//                System.out.println();
+//            }
+//        }
+        return rgbs;
+    }
+
+    private static void txtSave(int[] arr,String saveFile) throws IOException {
+        StringBuffer buffer=new StringBuffer();
+        for(int i=0;i<arr.length;i++){
+            buffer.append(arr[i]+" ");
+        }
+        BufferedWriter writer=new BufferedWriter(new FileWriter(saveFile));
+        writer.write(buffer.toString());
+        writer.close();
     }
 }

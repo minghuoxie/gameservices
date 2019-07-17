@@ -32,6 +32,7 @@ import unicode.myhuffmancode.HufNode;
 import unicode.myhuffmancode.MyHuffmanList;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
@@ -282,16 +283,7 @@ public class OnlyMain {
         }
     }
 
-    private static void test_SetBgColor(){
-        //   https://blog.csdn.net/STN_LCD/article/details/78629055   JPEG的解码过程
 
-       // SetBgColor.setBgColort(210,"D:\\Temp\\img\\test.jpg","D:\\Temp\\img\\ntest.png");
-      //  SetBgColor.setImage("D:\\Temp\\img\\rangTwo.jpg");
-
-        SetBgColor.setImage("D:/Temp/img/lxyone.jpg","D:/Temp/img/lxyonecolor.txt","D:/Temp/img/lxyonecolor.jpg");
-
-       // SetBgColor.readImage("D:/Temp/img/lxyone.jpg");
-    }
     private static void test_MyHuffmanList_test(){
         HufNode nodeA=new HufNode(null,null,"A",5);
         HufNode nodeB=new HufNode(null,null,"B",4);
@@ -373,11 +365,30 @@ public class OnlyMain {
             e.printStackTrace();
         }
     }
+    private static void test_SetBgColor(){
+        //   https://blog.csdn.net/STN_LCD/article/details/78629055   JPEG的解码过程
+
+        // SetBgColor.setBgColort(210,"D:\\Temp\\img\\test.jpg","D:\\Temp\\img\\ntest.png");
+        //  SetBgColor.setImage("D:\\Temp\\img\\rangTwo.jpg");
+
+       // SetBgColor.setImage("D:/Temp/img/lxyone.jpg","D:/Temp/img/lxyonecolor.txt","D:/Temp/img/lxyonecolor.jpg");
+     //   SetBgColor.rgbToYUV("D:/Temp/img/lxyone.jpg","D:/Temp/img/lxyoneyuv.jpg");
+      //  SetBgColor.yuvToRGB("D:/Temp/img/lxyoneyuv.jpg","D:/Temp/img/yuvtolxone.jpg");
+        // SetBgColor.readImage("D:/Temp/img/lxyone.jpg");
+
+        //SetBgColor.changeImageBig("D:/Temp/img/img20190717/lxyone.jpg","D:/Temp/img/img20190717/changeOnelxyone.jpg");
+        try {
+            //SetBgColor.dctEach("D:/Temp/img/img20190717/changeOnelxyone.jpg");
+            SetBgColor.dctSaveImg("D:/Temp/img/img20190717/changeOnelxyone.jpg","D:/Temp/img/img20190717/dcttlxyone.jpg");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public static void main(String[] args){
         System.out.println("---------------------start---------------------------");
-        test_MyHuffmanList_error();
+        test_SetBgColor();
       //  Integer.parseInt("-9210235");
-        System.out.println("---------------------end---------------------------");
+        System.out.println("\r\n---------------------end---------------------------");
     }
 
     //11111111111111111111111111111111  2147483647
