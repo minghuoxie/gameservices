@@ -312,13 +312,13 @@ public class SetBgColor {
                 iMatrix[i][j]=(double)(rgbs[i*imgMin+j]);
             }
         }
-        for(int i=0;i<imgMin;i++){
-            for(int j=0;j<imgMin;j++){
-                System.out.print(iMatrix[i][j]+" ");
+        for(int i=0;i<rgbs.length;i++){
+            System.out.print(rgbs[i]+" ");
+            if(i%imgMin==0&&i!=0){
+                System.out.println();
             }
-            System.out.println();
         }
-        System.out.println("-------------------------------------------------------------------");
+        System.out.println("\r\n-------------------------------------------------------------------");
         double[][] quotient=coefficient();//求系数矩阵
         double[][] quotientt=transposingMatrix(quotient);//转置矩阵
         double[][] temp=matrixMultiply(quotient,iMatrix);
@@ -333,11 +333,11 @@ public class SetBgColor {
                 newpix[i*imgMin+j]=(int)iMatrix[i][j];
             }
         }
-        for(int i=0;i<imgMin;i++){
-            for(int j=0;j<imgMin;j++){
-                System.out.print(iMatrix[i][j]+" ");
+        for(int i=0;i<newpix.length;i++){
+            System.out.print(newpix[i]+" ");
+            if(i%imgMin==0&&i!=0){
+                System.out.println();
             }
-            System.out.println();
         }
         if(save=='y'){
             txtSave(newpix,"D:/Temp/img/img20190717/dctlxyone.txt");
@@ -456,5 +456,31 @@ public class SetBgColor {
                 inx++;
             }
         }
+    }
+
+    //---------------------------jpeg文件格式---------------------------------------------------------------------------//
+    public static void jpegStruct(String filePath) throws Exception {
+        InputStream input=new FileInputStream(filePath);
+        int len=0;
+        byte[] buf=new byte[input.available()];
+        input.read(buf);
+        for(int i=0;i<buf.length;i++){
+            System.out.print("0x"+Integer.toHexString(buf[i]));
+        }
+        /**
+         * 0xffffffff0xffffffd8  0XFFD8 SOI 图像开始
+         * 0xffffffff0xffffffe0  APP0 该标记之后包含9个具体的字段
+         * 1.0x00x10 两个字节  用来表示1--9的9个字段的总长度。 10
+         * 2.0x4a0x460x490x460x0 5个字节，固定值0X4A6494600，表示了字符串“JFIF0”。
+         * 3.0x10x2     版本号，表示“JFIF0”的版本号为1.2
+         * 4.0x0	    X,Y方向的密度单位：1个字节，只有三个值可选，0：无单位；1：点数每英寸；2：点数每厘米；  无单位
+         * 5.0x00x1	    X方向像素密度
+         * 6.0x00x1	    Y方向像素密度
+         * 7.0x0	    缩略图水平像素数目
+         * 8.0x0	    缩略图垂直像素数目   缩略图水平像素数目 为0和缩略图垂直像素数目则没有缩略图RGB位图
+         *
+         * 0xffffffff0xffffffdb 	DQT 定义量化表；标记代码为固定值0XFFDB；包含9个具体字段
+         *
+         * */
     }
 }

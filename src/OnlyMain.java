@@ -1,6 +1,7 @@
 import media.image.ImageTest;
 import media.image.SetBgColor;
 import media.media.TestMain;
+import media.media.XmlAndBpmn;
 import net.conn.WoffTest;
 import net.connurl.DouYun;
 import net.connurl.GoMain;
@@ -241,7 +242,7 @@ public class OnlyMain {
        String stoe=Each.stoo("129",16);
 
         //十六进制转二进制
-       // String erltoo=Each.ltoo("03DF",2);
+        stoe=Each.ltoo("F0",10);
         //十六进制转十进制
        // String sltoo=Each.ltoo("03DF",10);
 
@@ -382,15 +383,19 @@ public class OnlyMain {
            // SetBgColor.dctSaveImg("D:/Temp/img/img20190717/changeOnelxyone.jpg","D:/Temp/img/img20190717/dcttlxyone.jpg");
           //  SetBgColor.imgEblock("D:/Temp/img/img20190717/dct/lxyone.jpg","D:/Temp/img/img20190717/dct/elxyone.jpg");
             //SetBgColor.imgEblock("D:/Temp/img/img20190717/dct/elxyone.jpg");
-            SetBgColor.dctEach("D:/Temp/img/img20190717/dct/elxyone01.jpg",'n','n');
-        } catch (IOException e) {
+           // SetBgColor.dctEach("D:/Temp/img/img20190717/dct/elxyone01.jpg",'n','n');
+            SetBgColor.jpegStruct("D:/Temp/img/img20190717/elxyone.jpg");
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    private static void test_XmlAndBpmn(){
+        XmlAndBpmn.eachXmlAndBpmn("D:\\Temp\\img\\imgbpmn\\ceshisss.bpmn","D:\\Temp\\img\\imgbpmn\\ceshisss.xml");
+    }
     public static void main(String[] args){
         System.out.println("---------------------start---------------------------");
-        test_SetBgColor();
-      //  Integer.parseInt("-9210235");
+        test_XmlAndBpmn();
         System.out.println("\r\n---------------------end---------------------------");
     }
 
