@@ -218,7 +218,17 @@ public class OnlyMain {
         //test_GoMain_go();
         // ChinaUtf.saveToFile("D:/Temp/unicode.txt");
 
-        ChinaUtf.testFindStrs("你好啊，大哥，，，，五五五五，，，刚刚聊");
+       ChinaUtf.testFindStrs("你哥哥哥帅");
+
+//       byte[] buf=new byte[2];
+//        buf[0]=(byte)0xB6;
+//        buf[1]=(byte)0xE8;
+//        try {
+//            System.out.println(new String(buf,"GBK"));
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
+        //  ChinaUtf.testChine();
         //ChinaUtf.randomChines();
         // 44
         // 38+4+8
@@ -233,7 +243,7 @@ public class OnlyMain {
         //String str=Each.etoo("1111011111",16);
 
         //十进制转二进制
-       String stoe=Each.stoo("129",16);
+       String stoe=Each.stoo("228",16);
 
         //十六进制转二进制
        // String erltoo=Each.ltoo("03DF",2);
@@ -256,8 +266,8 @@ public class OnlyMain {
         try {
             //  UnicodeTest.saveFile("D:/Temp/unicode.txt");
            // UnicodeTest.testFind("谢");
-           // String s=UnicodeTest.eachCodef("谢");
-            String s=UnicodeTest.codeEach("\\u4E25");
+           String s=UnicodeTest.eachCodef("哥");
+           //s=UnicodeTest.codeEach("\\u5105");
             System.out.println(s);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -271,7 +281,7 @@ public class OnlyMain {
 //            UtfBa.testPrintUTFONE("D:/Temp/utf8.txt");
 //            UtfBa.testPrintUTFTWO("D:/Temp/utf8.txt");
 //            UtfBa.testPringUTFSAN("D:/Temp/utf8.txt");
-           String findCode=UtfBa.testFindCode("中");
+           String findCode=UtfBa.testFindCode("你哥哥哥帅");
            System.out.println("--:"+findCode);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -279,12 +289,15 @@ public class OnlyMain {
     }
 
     private static void test_SetBgColor(){
+        System.out.println("ahskjdsdfdfgdfgfghsdfsdffgdfgasdfasdfdgfdfgsdfasdfasdsdfsdfasdasfdfsdfasdasdjksd".length());
        // SetBgColor.setBgColort(210,"D:\\Temp\\img\\test.jpg","D:\\Temp\\img\\ntest.png");
-        SetBgColor.setImage("D:\\Temp\\img\\rangTwo.jpg");
+       // SetBgColor.setImage("D:\\Temp\\img\\rangTwo.jpg");
+        SetBgColor.createImg("E:\\temp\\testpng.png");
     }
     public static void main(String[] args){
         System.out.println("------------------start-------------------");
         test_SetBgColor();
+
         System.out.println("------------------end-------------------");
 //        ImageTest.readFile("D:\\Temp\\img\\lxyone.jpg");
 //        //2147483648-15195862=2132287786

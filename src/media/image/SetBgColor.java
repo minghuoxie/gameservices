@@ -9,10 +9,61 @@ import java.io.IOException;
 import java.util.Random;
 
 public class SetBgColor {
+
+    /**
+     * 生成图片
+     * /
+
+
     /**
      * 将白色的背景设置为透明
      * */
     public static int colorRange=0;
+    public static void createImg(String saveFilePath){
+        int width=1200;
+        int hei=1195;
+        BufferedImage bufImg=new BufferedImage(width,hei,BufferedImage.TYPE_4BYTE_ABGR);
+        Graphics2D g2d=(Graphics2D)bufImg.getGraphics();//获取画笔
+       // Font font = new Font("宋体", 12, Font.PLAIN);
+
+        g2d.setColor(Color.RED);
+        g2d.fillOval(340,10,32,32);
+        //
+        g2d.fillRect(320,85,108,40);
+
+        g2d.setColor(Color.BLUE);
+        g2d.fillRect(325,85+20-6,12,12);
+       // g2d.drawString("好啊哥哥官方官",320,(85+12+20-8)); 14*6+12+10+2
+        g2d.drawString("jingershengbao",338,(85+12+20-8));
+
+        g2d.setColor(Color.RED);
+        g2d.fillOval(345,175,32,32);
+
+
+        //"55.0" width="85.0" x="100.0" y="290.0"/>
+        g2d.fillRect(100,290,85,55);
+
+        //height="55.0" width="85.0" x="305.0" y="290.0"/>
+        g2d.fillRect(305,290,85,55);
+
+        //height="55.0" width="85.0" x="465.0" y="295.0"/>
+        g2d.fillRect(465,295,480,55);
+        g2d.setColor(Color.BLUE);
+        g2d.drawString("ahskjdsdfdfgdfgfghsdfsdffgdfgasdfasdfdgfdfgsdfasdfasdsdfsdfasdasfdfsdfasdasdjksd",470,310);
+
+        g2d.setColor(Color.RED);
+
+        //height="32.0" width="32.0" x="330.0" y="445.0"/>
+        g2d.fillOval(330,445,32,32);
+
+
+        g2d.drawImage(bufImg,0,0,null);
+        try {
+            ImageIO.write(bufImg,"png",new File(saveFilePath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public static void setBgColor(int scolorRange,String filePath,String newFilePath){
         colorRange=scolorRange;
         try {

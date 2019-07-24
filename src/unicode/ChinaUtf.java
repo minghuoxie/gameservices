@@ -1,6 +1,7 @@
 package unicode;
 
 import java.io.*;
+import java.util.List;
 
 public class ChinaUtf {
     /***
@@ -195,6 +196,5 @@ public class ChinaUtf {
         return "0x"+str.substring(str.length()-2);
     }
 
-    //计算二级制
 
 }
