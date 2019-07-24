@@ -1,6 +1,7 @@
 import media.image.ImageTest;
 import media.image.SetBgColor;
 import media.media.TestMain;
+import media.media.XmlAndBpmn;
 import net.conn.WoffTest;
 import net.connurl.DouYun;
 import net.connurl.GoMain;
@@ -27,8 +28,12 @@ import unicode.ChinaUtf;
 import unicode.Each;
 import unicode.UnicodeTest;
 import unicode.UtfBa;
+import unicode.myhuffmancode.CreateHuffmanShu;
+import unicode.myhuffmancode.HufNode;
+import unicode.myhuffmancode.MyHuffmanList;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
@@ -36,6 +41,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -218,17 +224,7 @@ public class OnlyMain {
         //test_GoMain_go();
         // ChinaUtf.saveToFile("D:/Temp/unicode.txt");
 
-       ChinaUtf.testFindStrs("你哥哥哥帅");
-
-//       byte[] buf=new byte[2];
-//        buf[0]=(byte)0xB6;
-//        buf[1]=(byte)0xE8;
-//        try {
-//            System.out.println(new String(buf,"GBK"));
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        }
-        //  ChinaUtf.testChine();
+        ChinaUtf.testFindStrs("你好啊，大哥，，，，五五五五，，，刚刚聊");
         //ChinaUtf.randomChines();
         // 44
         // 38+4+8
@@ -246,7 +242,7 @@ public class OnlyMain {
        String stoe=Each.stoo("228",16);
 
         //十六进制转二进制
-       // String erltoo=Each.ltoo("03DF",2);
+        stoe=Each.ltoo("F0",10);
         //十六进制转十进制
        // String sltoo=Each.ltoo("03DF",10);
 
@@ -266,8 +262,8 @@ public class OnlyMain {
         try {
             //  UnicodeTest.saveFile("D:/Temp/unicode.txt");
            // UnicodeTest.testFind("谢");
-           String s=UnicodeTest.eachCodef("哥");
-           //s=UnicodeTest.codeEach("\\u5105");
+           // String s=UnicodeTest.eachCodef("谢");
+            String s=UnicodeTest.codeEach("\\u4E25");
             System.out.println(s);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -288,11 +284,118 @@ public class OnlyMain {
         }
     }
 
+
+    private static void test_MyHuffmanList_test(){
+        HufNode nodeA=new HufNode(null,null,"A",5);
+        HufNode nodeB=new HufNode(null,null,"B",4);
+        HufNode nodeC=new HufNode(null,null,"C",7);
+        HufNode nodeD=new HufNode(null,null,"D",6);
+        HufNode nodeE=new HufNode(null,null,"E",3);
+
+        MyHuffmanList list1=new MyHuffmanList();
+        list1.addNode(nodeB,nodeE); //7
+        MyHuffmanList list2=new MyHuffmanList();
+        list2.addNode(nodeA,nodeD);//11
+        MyHuffmanList list3=new MyHuffmanList();
+        list3.addNode(nodeC,list1.getFirstNode()); //14
+        MyHuffmanList list4=new MyHuffmanList();
+        list4.addNode(list2.getFirstNode(),list3.getFirstNode());
+        //0走左结点  1走又结点   读到具有字符code的结点再从新循环
+        //10:C  00:A 01:D 111:E 110:B
+        String code="100010000100111000111001110000111010110111";
+        String setCode="";
+        StringBuffer strBuffer=new StringBuffer();
+        for(int i=0;i<code.length();i++){
+            char ch=code.charAt(i);
+            HufNode linNode=list4.getNextNode(ch);
+            setCode+=ch;
+            if(linNode.getCode()!=null&&!linNode.getCode().equals("")){
+                strBuffer.append(linNode.getCode());
+                list4.setNextNode();
+                setCode+=",";
+            }
+        }
+        System.out.println(setCode);
+        System.out.println(strBuffer.toString());
+        System.out.println("-------------end-------------");
+    }
+    private static void test_MyHuffmanList_Create(){
+        List<HufNode> list=new LinkedList<>();
+        HufNode nodeA=new HufNode(null,null,"A",5);
+        HufNode nodeB=new HufNode(null,null,"B",4);
+        HufNode nodeC=new HufNode(null,null,"C",7);
+        HufNode nodeD=new HufNode(null,null,"D",6);
+        HufNode nodeE=new HufNode(null,null,"E",3);
+        list.add(nodeA);
+        list.add(nodeB);
+        list.add(nodeC);
+        list.add(nodeD);
+        list.add(nodeE);
+        MyHuffmanList hufList= CreateHuffmanShu.createHufByNode(list);
+        String co=hufList.getCode("100010000100111000111001110000111010110111");
+        //100010000100111000111001110000111010110111
+        //100010000100111000111001110000111010110111
+        System.out.println("解码:"+co);
+        String setCode=hufList.setCode(co);
+        System.out.println("编码:"+setCode);
+        System.out.println("-------------end-------------");
+    }
+
+    private static void test_MyHuffmanList_error(){
+        String s="BT";
+        List<HufNode> list=new LinkedList<>();
+        HufNode nodeA=new HufNode(null,null,"A",5);
+        HufNode nodeB=new HufNode(null,null,"B",4);
+        HufNode nodeC=new HufNode(null,null,"C",7);
+        HufNode nodeD=new HufNode(null,null,"D",6);
+        HufNode nodeE=new HufNode(null,null,"E",3);
+        list.add(nodeA);
+        list.add(nodeB);
+        list.add(nodeC);
+        list.add(nodeD);
+        list.add(nodeE);
+        MyHuffmanList hufList= CreateHuffmanShu.createHufByNode(list);
+        String setCode=hufList.setCode(s);
+        System.out.println("编码:"+setCode);
+        System.out.println("-------------end-------------");
+    }
+    private static void test_MyHuffmanList(){
+        try{
+            test_MyHuffmanList_Create();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     private static void test_SetBgColor(){
         System.out.println("ahskjdsdfdfgdfgfghsdfsdffgdfgasdfasdfdgfdfgsdfasdfasdsdfsdfasdasfdfsdfasdasdjksd".length());
        // SetBgColor.setBgColort(210,"D:\\Temp\\img\\test.jpg","D:\\Temp\\img\\ntest.png");
        // SetBgColor.setImage("D:\\Temp\\img\\rangTwo.jpg");
         SetBgColor.createImg("E:\\temp\\testpng.png");
+        //   https://blog.csdn.net/STN_LCD/article/details/78629055   JPEG的解码过程
+
+        // SetBgColor.setBgColort(210,"D:\\Temp\\img\\test.jpg","D:\\Temp\\img\\ntest.png");
+        //  SetBgColor.setImage("D:\\Temp\\img\\rangTwo.jpg");
+
+       // SetBgColor.setImage("D:/Temp/img/lxyone.jpg","D:/Temp/img/lxyonecolor.txt","D:/Temp/img/lxyonecolor.jpg");
+     //   SetBgColor.rgbToYUV("D:/Temp/img/lxyone.jpg","D:/Temp/img/lxyoneyuv.jpg");
+      //  SetBgColor.yuvToRGB("D:/Temp/img/lxyoneyuv.jpg","D:/Temp/img/yuvtolxone.jpg");
+        // SetBgColor.readImage("D:/Temp/img/lxyone.jpg");
+
+        //SetBgColor.changeImageBig("D:/Temp/img/img20190717/lxyone.jpg","D:/Temp/img/img20190717/changeOnelxyone.jpg");
+        try {
+            //SetBgColor.dctEach("D:/Temp/img/img20190717/changeOnelxyone.jpg");
+           // SetBgColor.dctSaveImg("D:/Temp/img/img20190717/changeOnelxyone.jpg","D:/Temp/img/img20190717/dcttlxyone.jpg");
+          //  SetBgColor.imgEblock("D:/Temp/img/img20190717/dct/lxyone.jpg","D:/Temp/img/img20190717/dct/elxyone.jpg");
+            //SetBgColor.imgEblock("D:/Temp/img/img20190717/dct/elxyone.jpg");
+           // SetBgColor.dctEach("D:/Temp/img/img20190717/dct/elxyone01.jpg",'n','n');
+            SetBgColor.jpegStruct("D:/Temp/img/img20190717/elxyone.jpg");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void test_XmlAndBpmn(){
+        XmlAndBpmn.eachXmlAndBpmn("D:\\Temp\\img\\imgbpmn\\ceshisss.bpmn","D:\\Temp\\img\\imgbpmn\\ceshisss.xml");
     }
     public static void main(String[] args){
         System.out.println("------------------start-------------------");
@@ -307,6 +410,9 @@ public class OnlyMain {
 //        String ss=Each.etoo("11111111",10);
 //        String stoe=Each.stoo("2132287785",2);
 //        System.out.println(ss);
+        System.out.println("---------------------start---------------------------");
+        test_XmlAndBpmn();
+        System.out.println("\r\n---------------------end---------------------------");
     }
 
     //11111111111111111111111111111111  2147483647

@@ -33,7 +33,7 @@ public class Each {
             if((c>='0'&&c<='9')||(c>='A'&&c<='F')){
                 continue;
             }else{
-                return "十进制数错误";
+                return "十六进制数错误";
             }
         }
         if(type==2){
