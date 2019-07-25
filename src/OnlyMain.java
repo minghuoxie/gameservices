@@ -1,4 +1,5 @@
 import media.image.ImageTest;
+import media.image.ImgLog;
 import media.image.SetBgColor;
 import media.media.TestMain;
 import media.media.XmlAndBpmn;
@@ -397,22 +398,15 @@ public class OnlyMain {
     private static void test_XmlAndBpmn(){
         XmlAndBpmn.eachXmlAndBpmn("D:\\Temp\\img\\imgbpmn\\ceshisss.bpmn","D:\\Temp\\img\\imgbpmn\\ceshisss.xml");
     }
+
+    private static void test_ImgLog(){
+        ImgLog.paint("E:\\temp\\logimg.png");
+    }
     public static void main(String[] args){
         System.out.println("------------------start-------------------");
-        test_SetBgColor();
+        test_ImgLog();
 
         System.out.println("------------------end-------------------");
-//        ImageTest.readFile("D:\\Temp\\img\\lxyone.jpg");
-//        //2147483648-15195862=2132287786
-//        //2132287786=1111111000110000010000100101010
-//        //
-//
-//        String ss=Each.etoo("11111111",10);
-//        String stoe=Each.stoo("2132287785",2);
-//        System.out.println(ss);
-        System.out.println("---------------------start---------------------------");
-        test_XmlAndBpmn();
-        System.out.println("\r\n---------------------end---------------------------");
     }
 
     //11111111111111111111111111111111  2147483647
