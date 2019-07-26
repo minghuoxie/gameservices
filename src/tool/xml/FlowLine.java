@@ -1,15 +1,33 @@
 package tool.xml;
 
 import java.util.List;
+import java.util.Map;
 
 public class FlowLine {
     private String id;
+    private String name;
     private String sourceRef;//起点
     private String targetRef;//终点
-    List<Point> points;
-
+    private List<Point> points;
+    private String condition;
     public String getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCondition() {
+        return condition;
+    }
+
+    public void setCondition(String condition) {
+        this.condition = condition;
     }
 
     public void setId(String id) {

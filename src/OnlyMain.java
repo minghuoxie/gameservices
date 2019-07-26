@@ -1,4 +1,5 @@
 import media.image.ImageTest;
+import media.image.ImgLog;
 import media.image.SetBgColor;
 import media.media.TestMain;
 import media.media.XmlAndBpmn;
@@ -400,15 +401,15 @@ public class OnlyMain {
         XmlAndBpmn.eachXmlAndBpmn("D:\\Temp\\img\\imgbpmn\\ceshisss.bpmn","D:\\Temp\\img\\imgbpmn\\ceshisss.xml");
     }
 
-    //xml文档解析测试
-    public static void test_TestXml(){
-       // TestXml.text("D:\\Temp\\img\\xml\\createimg.bpmn");
-        CreatePngByXml.createPng("D:\\Temp\\img\\xml\\createimg.bpmn","D:\\Temp\\img\\xml\\createtest4rgb.png");
+    private static void test_ImgLog(){
+        ImgLog.paint("E:\\temp\\logimg.png");
     }
-
+    private static void test_CreatePngByXml(){
+        CreatePngByXml.createPng("D:\\Temp\\img\\imgbpmn\\startprocess.bpmn","D:\\Temp\\img\\xml\\create.png");
+    }
     public static void main(String[] args){
         System.out.println("------------------start-------------------");
-        test_TestXml();
+        test_CreatePngByXml();
 
         System.out.println("------------------end-------------------");
     }

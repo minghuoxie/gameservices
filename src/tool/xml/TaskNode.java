@@ -1,11 +1,14 @@
 package tool.xml;
 
+import java.util.Map;
+
 public class TaskNode {
     private String nodeName;
     private String id;
     private String name;
     private char type;// r 矩形   o 圆形
     private TaskPoint taskPoint;
+    private Map<String,String> attributes;
 
     public String getNodeName() {
         return nodeName;
@@ -41,6 +44,14 @@ public class TaskNode {
 
     public TaskPoint getTaskPoint() {
         return taskPoint;
+    }
+
+    public Map<String, String> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Map<String, String> attributes) {
+        this.attributes = attributes;
     }
 
     public void setTaskPoint(TaskPoint taskPoint) {

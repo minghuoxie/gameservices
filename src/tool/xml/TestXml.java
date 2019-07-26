@@ -7,7 +7,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TestXml {
     private static Node imgattr;
@@ -46,6 +48,15 @@ public class TestXml {
                     flowLine.setPoints(list);
                 }
                 flowLines.add(flowLine);
+
+                //添加条件
+                NodeList conditionNodes=linPro.getChildNodes();
+                for(int condition=0;condition<conditionNodes.getLength();condition++){
+                    Node conditionNodesc=conditionNodes.item(condition);
+                    if(!"#text".equals(conditionNodesc.getNodeName())&&"conditionExpression".equals(conditionNodesc.getNodeName())){
+                        flowLine.setCondition(conditionNodesc.getNodeValue());
+                    }
+                }
             }
         }
     }
@@ -61,6 +72,14 @@ public class TestXml {
                     c='o';
                 }
                 TaskNode taskNode=new TaskNode();
+                NamedNodeMap nodeMap=linPro.getAttributes();
+                Map<String,String> attri=new HashMap<>();
+                for(int node=0;node<nodeMap.getLength();node++){
+                    if(!"id".equals(nodeMap.item(node).getNodeName())&&!"name".equals(nodeMap.item(node).getNodeName())) {
+                        attri.put(nodeMap.item(node).getNodeName(), nodeMap.item(node).getNodeValue());
+                    }
+                }
+                taskNode.setAttributes(attri);
                 taskNode.setId(linPro.getAttributes().getNamedItem("id").getNodeValue());
                 taskNode.setName(linPro.getAttributes().getNamedItem("name").getNodeValue());
                 taskNode.setNodeName(linPro.getNodeName());
@@ -92,7 +111,6 @@ public class TestXml {
             //
             NodeList process=root.getElementsByTagName("process");
             imgattr=root.getElementsByTagName("bpmndi:BPMNPlane").item(0);
-            System.out.println("---process:"+process.getLength());
             if(process.getLength()>0){
                 pro=process.item(0);
                NodeList proChildres= pro.getChildNodes();
