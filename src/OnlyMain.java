@@ -24,6 +24,8 @@ import org.python.util.PythonInterpreter;
 import study.Basebean;
 import study.ChildBean;
 import study.NoBaseBean;
+import tool.xml.CreatePngByXml;
+import tool.xml.TestXml;
 import unicode.ChinaUtf;
 import unicode.Each;
 import unicode.UnicodeTest;
@@ -397,22 +399,18 @@ public class OnlyMain {
     private static void test_XmlAndBpmn(){
         XmlAndBpmn.eachXmlAndBpmn("D:\\Temp\\img\\imgbpmn\\ceshisss.bpmn","D:\\Temp\\img\\imgbpmn\\ceshisss.xml");
     }
+
+    //xml文档解析测试
+    public static void test_TestXml(){
+       // TestXml.text("D:\\Temp\\img\\xml\\createimg.bpmn");
+        CreatePngByXml.createPng("D:\\Temp\\img\\xml\\createimg.bpmn","D:\\Temp\\img\\xml\\createtest4rgb.png");
+    }
+
     public static void main(String[] args){
         System.out.println("------------------start-------------------");
-        test_SetBgColor();
+        test_TestXml();
 
         System.out.println("------------------end-------------------");
-//        ImageTest.readFile("D:\\Temp\\img\\lxyone.jpg");
-//        //2147483648-15195862=2132287786
-//        //2132287786=1111111000110000010000100101010
-//        //
-//
-//        String ss=Each.etoo("11111111",10);
-//        String stoe=Each.stoo("2132287785",2);
-//        System.out.println(ss);
-        System.out.println("---------------------start---------------------------");
-        test_XmlAndBpmn();
-        System.out.println("\r\n---------------------end---------------------------");
     }
 
     //11111111111111111111111111111111  2147483647
