@@ -1,3 +1,4 @@
+import liststream.ListStreamTest;
 import media.image.ImageTest;
 import media.image.ImgLog;
 import media.image.SetBgColor;
@@ -407,9 +408,14 @@ public class OnlyMain {
     private static void test_CreatePngByXml(){
         CreatePngByXml.createPng("D:\\Temp\\img\\imgbpmn\\startprocess.bpmn","D:\\Temp\\img\\xml\\create.png");
     }
+
+    private static void test_ListStreamTest(){
+        //ListStreamTest.testStream();
+        ListStreamTest.testFind();
+    }
     public static void main(String[] args){
         System.out.println("------------------start-------------------");
-        test_CreatePngByXml();
+        Long id=new Long(23);
 
         System.out.println("------------------end-------------------");
     }
