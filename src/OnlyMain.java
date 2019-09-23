@@ -1,4 +1,5 @@
 import liststream.ListStreamTest;
+import media.image.CmykImage;
 import media.image.ImageTest;
 import media.image.ImgLog;
 import media.image.SetBgColor;
@@ -28,22 +29,18 @@ import study.ChildBean;
 import study.NoBaseBean;
 import tool.xml.CreatePngByXml;
 import tool.xml.TestXml;
-import unicode.ChinaUtf;
-import unicode.Each;
-import unicode.UnicodeTest;
-import unicode.UtfBa;
+import unicode.*;
 import unicode.myhuffmancode.CreateHuffmanShu;
 import unicode.myhuffmancode.HufNode;
+import unicode.myhuffmancode.INsssseteImpl;
 import unicode.myhuffmancode.MyHuffmanList;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -411,13 +408,66 @@ public class OnlyMain {
 
     private static void test_ListStreamTest(){
         //ListStreamTest.testStream();
-        ListStreamTest.testFind();
+       // ListStreamTest.testFind();
     }
+
+    //图像压缩
+    private static void test_SetBgColor_imgYasuo() throws IOException {
+//        File fileo=new File("D:\\data\\images\\new\\san\\newTop.jpg");
+//        File two=new File("D:\\data\\images\\new\\san\\testNew.jpg");
+//        two.createNewFile();
+      //  SetBgColor.resize(fileo,two,100,0.8f);
+        File file=new File("D:\\data\\images\\new\\san\\newTop.jpg");
+        SetBgColor.colorModel(file);
+    }
+
+    //CMYK图像的处理   http://www.doc88.com/p-58261301281.html
+
+    //https://www.cnblogs.com/interdrp/p/7076202.html
+    //https://github.com/coobird/thumbnailator  图像处理
+    //https://github.com/haraldk/TwelveMonkeys  图像处理工具
+    private static void test_CmykImage() throws IOException {
+       // CmykImage.imgHandle("D:\\data\\images\\new\\san\\aaaa.jpg","D:\\data\\images\\new\\san\\createt.jpg");
+
+        File orgFile=new File("D:\\data\\images\\new\\san\\tnewttt.png");
+        File saveFile=new File("D:\\data\\images\\new\\san\\newfile.png");
+        saveFile.createNewFile();
+
+        CmykImage.resize(orgFile,saveFile,100,0.5f);
+       // CmykImage.fileSize(orgFile);
+    }
+
     public static void main(String[] args){
         System.out.println("------------------start-------------------");
-        Long id=new Long(23);
+        DecimalFormat df = new DecimalFormat("0.00");
+        double d = 123.9078;
+        double db =Double.parseDouble(df.format(d));
+        System.out.println("---------------end---"+db);
 
-        System.out.println("------------------end-------------------");
+//        try {
+//            test_CmykImage();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+
+//        new INsssseteImpl(new INssssete(){
+//            @Override
+//            public void doThing(String one, int two) {
+//                System.out.println("--------------sdfsdfdf"+one+":::"+two);
+//            }
+//        });
+//        byte[] buf=new byte[2];
+//        buf[0]=33;
+//        buf[1]=3;
+//        try {
+//            String s=new String(buf,"unicode");
+//            System.out.println("------------------end-------------------"+s);
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
+
+        System.out.println(Each.stoo("33",16));
     }
 
     //11111111111111111111111111111111  2147483647
@@ -425,6 +475,14 @@ public class OnlyMain {
     //11111111 00011000 00100001 00101010   2132287786   RGB(24,33,42)
     //11111111000110000010000100101001   2132287785
 
+    /**
+     * Integer与int的区别
+     * */
+    private static void test_Integer(){
+        Integer integerOne=new Integer(1024);
+        Integer integerTwo=new Integer(1024);
+        System.out.println("---result::"+(integerOne.equals(integerTwo)));
+    }
 
     private static void sub(){
         String str="<ul id='thread_list' >";
@@ -449,3 +507,9 @@ public class OnlyMain {
         }
     }
 }
+
+/**
+ * 需要注意的是，对于CMYK模式的图像，由于JDK的Bug，目前还不能够处理，会出以下异常：
+ *
+ *
+ * */

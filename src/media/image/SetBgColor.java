@@ -1,20 +1,179 @@
 package media.image;
 
+import com.sun.image.codec.jpeg.JPEGCodec;
+import com.sun.image.codec.jpeg.JPEGEncodeParam;
+import com.sun.image.codec.jpeg.JPEGImageEncoder;
+
+import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.ConvolveOp;
+import java.awt.image.Kernel;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.List;
 
+import static org.jsoup.helper.StringUtil.isBlank;
+
 public class SetBgColor {
 
     /**
-     * 生成图片
-     * /
+     *
+     * 修改图片大小
+     * <p>描述</p>
+     * @date 2014-7-10 下午4:27:51
+     * @version
+     * @param srcFilePath
+     * @param fileExtName
+     * @return
+     * @throws IOException
+     */
+    public static boolean compressPic(String srcFilePath,String fileExtName) throws IOException {
+        File file = null;
+        BufferedImage src = null;
+        FileOutputStream out = null;
+        ImageWriter imgWrier;
+        ImageWriteParam imgWriteParams;
 
+
+        long start1 = System.currentTimeMillis();
+        // 指定写图片的方式为 jpg
+        imgWrier = ImageIO.getImageWritersByFormatName("jpg").next();
+        imgWriteParams = imgWrier.getDefaultWriteParam();
+//            imgWriteParams = new javax.imageio.plugins.jpeg.JPEGImageWriteParam(
+//                    null);
+//            imgWriteParams = new javax.imageio.plugins.jpeg.JPEGImageWriteParam(
+//                    null);
+
+
+        imgWriteParams.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+        // 这里指定压缩的程度，参数qality是取值0~1范围内，
+        imgWriteParams.setCompressionQuality((float) 0.8);
+        //imgWriteParams.setProgressiveMode(ImageWriteParam.MODE_DISABLED);//
+        ColorModel colorModel =ImageIO.read(new File(srcFilePath)).getColorModel();// ColorModel.getRGBdefault();
+        // 指定压缩时使用的色彩模式
+
+        imgWriteParams.setDestinationType(new javax.imageio.ImageTypeSpecifier(
+                colorModel, colorModel.createCompatibleSampleModel(16, 16)));
+
+        long end1 = System.currentTimeMillis();
+        System.out.println("11111消耗时间："+((double)end1-(double)start1)/1000+"秒");
+        try {
+            if (isBlank(srcFilePath)) {
+                return false;
+            } else {
+                file = new File(srcFilePath);
+                src = ImageIO.read(file);
+                out = new FileOutputStream(srcFilePath);
+
+                System.out.println("22222");
+                imgWrier.reset();
+
+                // 必须先指定 out值，才能调用write方法, ImageOutputStream可以通过任何
+                // OutputStream构造
+                imgWrier.setOutput(ImageIO.createImageOutputStream(out));
+                System.out.println("3333333");
+                // 调用write方法，就可以向输入流写图片
+
+                long start4 = System.currentTimeMillis();
+                imgWrier.write(null, new IIOImage(src, null, null),
+                        imgWriteParams);
+                long end4 = System.currentTimeMillis();
+
+                System.out.println("4444消耗时间："+((double)end4-(double)start4)/1000+"秒");
+
+                src.flush();
+                out.flush();
+                out.close();
+                imgWrier.dispose();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+
+    //图片的颜色模型
+    public static void colorModel(File path) throws IOException {
+           BufferedImage ima=ImageIO.read(path);
+            ColorModel colorModel =  ima.getColorModel();
+    }
+
+
+    //减少图像的质量
+    public static void resize(File originalFile, File resizedFile,
+                              int newWidth, float quality) throws IOException {
+
+        if (quality > 1) {
+            throw new IllegalArgumentException(
+                    "Quality has to be between 0 and 1");
+        }
+
+        ImageIcon ii = new ImageIcon(originalFile.getCanonicalPath());
+        Image i = ii.getImage();
+        Image resizedImage = null;
+        newWidth=i.getWidth(null);
+        int iHeight = i.getHeight(null);
+        resizedImage = i.getScaledInstance(newWidth, iHeight, Image.SCALE_SMOOTH);
+//        int iWidth = i.getWidth(null);
+//        int iHeight = i.getHeight(null);
+//
+//        if(iWidth < newWidth){
+//            newWidth = iWidth;
+//        }
+//        if (iWidth > iHeight) {
+//
+//        } else {
+//            resizedImage = i.getScaledInstance((newWidth * iWidth) / iHeight,
+//                    newWidth, Image.SCALE_SMOOTH);
+//        }
+
+        // This code ensures that all the pixels in the image are loaded.
+        Image temp = new ImageIcon(resizedImage).getImage();
+
+        // Create the buffered image.
+        BufferedImage bufferedImage = new BufferedImage(temp.getWidth(null),
+                temp.getHeight(null), BufferedImage.TYPE_INT_RGB);
+
+        // Copy image to buffered image.
+        Graphics g = bufferedImage.createGraphics();
+
+        // Clear background and paint the image.
+        g.setColor(Color.white);
+        g.fillRect(0, 0, temp.getWidth(null), temp.getHeight(null));
+        g.drawImage(temp, 0, 0, null);
+        g.dispose();
+
+        // Soften.
+        float softenFactor = 0.05f;
+        float[] softenArray = { 0, softenFactor, 0, softenFactor,
+                1 - (softenFactor * 4), softenFactor, 0, softenFactor, 0 };
+        Kernel kernel = new Kernel(3, 3, softenArray);
+        ConvolveOp cOp = new ConvolveOp(kernel, ConvolveOp.EDGE_NO_OP, null);
+        bufferedImage = cOp.filter(bufferedImage, null);
+
+        // Write the jpeg to a file.
+        FileOutputStream out = new FileOutputStream(resizedFile);
+
+        // Encodes image as a JPEG data stream
+        JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
+
+        JPEGEncodeParam param = encoder
+                .getDefaultJPEGEncodeParam(bufferedImage);
+
+        param.setQuality(quality, true);
+
+        encoder.setJPEGEncodeParam(param);
+        encoder.encode(bufferedImage);
+    }
 
     /**
      * 将白色的背景设置为透明
@@ -69,17 +228,17 @@ public class SetBgColor {
         colorRange=scolorRange;
         try {
             BufferedImage bufImage= ImageIO.read(new File(filePath));
-            Graphics2D g2d=(Graphics2D)bufImage.getGraphics();//获取画笔
-            for(int x=bufImage.getMinX();x<bufImage.getWidth();x++){
-                for(int y=bufImage.getMinY();y<bufImage.getHeight();y++){
-                    int rgb=bufImage.getRGB(x,y);
-                    if(colorInRange(rgb)){
-                        System.out.println(colorRange+"=="+rgb);
-                        bufImage.setRGB(x,y,rgb&0x00FFFFFF);
-                    }
-                }
-            }
-            g2d.drawImage(bufImage,0,0,null);
+//            Graphics2D g2d=(Graphics2D)bufImage.getGraphics();//获取画笔
+//            for(int x=bufImage.getMinX();x<bufImage.getWidth();x++){
+//                for(int y=bufImage.getMinY();y<bufImage.getHeight();y++){
+//                    int rgb=bufImage.getRGB(x,y);
+//                    if(colorInRange(rgb)){
+//                        System.out.println(colorRange+"=="+rgb);
+//                        bufImage.setRGB(x,y,rgb&0x00FFFFFF);
+//                    }
+//                }
+//            }
+//            g2d.drawImage(bufImage,0,0,null);
             ImageIO.write(bufImage,"png",new File(newFilePath));
         } catch (IOException e) {
             e.printStackTrace();
@@ -507,6 +666,55 @@ public class SetBgColor {
                 inx++;
             }
         }
+    }
+
+
+    //图像缩放
+    public static void imgYasuo(String filePath,String savePath) throws IOException {
+        //定义一个BufferedImage对象，用于保存缩小后的位图
+//        BufferedImage bufferedImage=new BufferedImage(217,190,BufferedImage.TYPE_INT_RGB);
+//        Graphics graphics=bufferedImage.getGraphics();
+//
+//        //读取原始位图
+//        BufferedImage srcImage= ImageIO.read(new File(filePath));
+//
+//        //将原始位图缩小后绘制到bufferedImage对象中
+//        graphics.drawImage(srcImage,0,0,217,190,null);
+//        //将bufferedImage对象输出到磁盘上
+//        ImageIO.write(bufferedImage,"jpg",new File(savePath));
+
+        BufferedImage image = ImageIO.read(new File(filePath));
+        // 高度和宽度
+        int height = image.getHeight();
+        int width = image.getWidth();
+
+        // 生产背景透明和内容透明的图片
+        ImageIcon imageIcon = new ImageIcon(image);
+        BufferedImage bufferedImage = new BufferedImage(200, 100, BufferedImage.TYPE_3BYTE_BGR);
+        Graphics2D g2D = (Graphics2D) bufferedImage.getGraphics(); // 获取画笔
+        g2D.drawImage(imageIcon.getImage(), 0, 0, null); // 绘制Image的图片
+//        int alpha = 0; // 图片透明度
+//        // 外层遍历是Y轴的像素
+//        for (int y = bufferedImage.getMinY(); y < bufferedImage.getHeight(); y++) {
+//            // 内层遍历是X轴的像素
+//            for (int x = bufferedImage.getMinX(); x < bufferedImage.getWidth(); x++) {
+//                int rgb = bufferedImage.getRGB(x, y);
+//                // 对当前颜色判断是否在指定区间内
+//                if (colorInRange(rgb)){
+//                    alpha = 0;
+//                }else{
+//                    // 设置为不透明
+//                    alpha = 255;
+//                }
+//                // #AARRGGBB 最前两位为透明度
+//                rgb = (alpha << 24) | (rgb & 0x00ffffff);
+//                bufferedImage.setRGB(x, y, rgb);
+//            }
+//        }
+
+        // 绘制设置了RGB的新图片
+        g2D.drawImage(bufferedImage, 0, 0, null);
+        ImageIO.write(bufferedImage, "jpg", new File(savePath));
     }
 
     //---------------------------jpeg文件格式---------------------------------------------------------------------------//
